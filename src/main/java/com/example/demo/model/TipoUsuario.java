@@ -11,6 +11,6 @@ import lombok.Getter;
 public class TipoUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idTipoUsuario;
+    private Long id;
     private String nombre;
 }

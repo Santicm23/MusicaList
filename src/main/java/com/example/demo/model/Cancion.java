@@ -20,6 +20,6 @@ public class Cancion {
     private String valoracion;
     private Date fechaPublicacion;
     @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "id_genero")
+    @JoinColumn(name = "id_genero", referencedColumnName = "id")
     private Genero genero;
 }

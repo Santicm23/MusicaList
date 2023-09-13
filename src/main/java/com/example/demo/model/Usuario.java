@@ -16,7 +16,7 @@ public class Usuario {
     private String contrasena;
     private Boolean activo;
     @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "id_tipo_usuario")
+    @JoinColumn(name = "id_tipo_usuario", referencedColumnName = "id")
     private TipoUsuario rol;
     @ManyToMany
     @JoinTable(
