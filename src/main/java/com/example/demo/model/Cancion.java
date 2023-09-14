@@ -14,8 +14,8 @@ public class Cancion {
     private String nombre;
     private String autor;
     private String album;
-    private String portada;
-    private String sonido;
+//    private String portada;
+//    private String sonido;
     private Long numLikes;
     private String valoracion;
     private Date fechaPublicacion;

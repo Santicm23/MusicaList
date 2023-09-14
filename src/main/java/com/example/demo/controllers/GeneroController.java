@@ -10,5 +10,4 @@ public class GeneroController {
     @Autowired
     private GeneroRepository generoRepository;
 
-
 }
