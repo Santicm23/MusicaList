@@ -33,12 +33,12 @@ public class UsuarioController {
     }
 
     @PostMapping(value = "/usuario", produces = "application/json")
-    public Usuario createUsuario(Usuario usuario) {
+    public Usuario createUsuario(@RequestBody Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
     @PutMapping(value = "/usuario/{uid}", produces = "application/json")
-    public Usuario updateUsuario(@PathVariable Long uid, Usuario usuario) {
+    public Usuario updateUsuario(@PathVariable Long uid, @RequestBody Usuario usuario) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
         if (usuarioOptional.isPresent()) {
@@ -60,7 +60,10 @@ public class UsuarioController {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
         if (usuarioOptional.isPresent()) {
-            usuarioRepository.delete(usuarioOptional.get());
+            Usuario usuarioTemp = usuarioOptional.get();
+            usuarioTemp.setActivo(false);
+
+            usuarioRepository.save(usuarioTemp);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Usuario no encontrado");

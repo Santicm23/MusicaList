@@ -30,6 +30,7 @@ CREATE TABLE `cancion` (
     `autor` varchar(45) NOT NULL,
     `album` varchar(45) NOT NULL,
     `num_likes` int(11) NOT NULL,
+    `valoracion` int(11) NOT NULL,
 --     `sonido` blob NOT NULL,
 --     `portada` blob,
     `id_genero` int(11) NOT NULL,

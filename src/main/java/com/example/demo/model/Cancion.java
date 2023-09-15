@@ -18,7 +18,6 @@ public class Cancion {
 //    private String sonido;
     private Long numLikes;
     private String valoracion;
-    private Date fechaPublicacion;
     @ManyToOne
     @JoinColumn(name = "id_genero", referencedColumnName = "id")
     private Genero genero;

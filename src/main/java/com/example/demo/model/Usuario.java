@@ -11,18 +11,18 @@ import java.util.List;
 @Setter
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
     private Long id;
     private String nombre;
     private String correo;
     private String contrasena;
-    private Boolean activo;
+    private Boolean activo = true;
     @ManyToOne
     @JoinColumn(name = "id_tipo_usuario", referencedColumnName = "id")
     private TipoUsuario rol;
     @ManyToMany
     @JoinTable(
-            name = "usuario_rol",
+            name = "likes",
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_cancion")
     )
