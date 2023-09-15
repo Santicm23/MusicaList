@@ -56,14 +56,14 @@ public class UsuarioController {
     }
 
     @DeleteMapping(value = "/usuario/{uid}", produces = "application/json")
-    public void deleteUsuario(@PathVariable Long uid) {
+    public Usuario deleteUsuario(@PathVariable Long uid) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
         if (usuarioOptional.isPresent()) {
             Usuario usuarioTemp = usuarioOptional.get();
             usuarioTemp.setActivo(false);
 
-            usuarioRepository.save(usuarioTemp);
+            return usuarioRepository.save(usuarioTemp);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Usuario no encontrado");
