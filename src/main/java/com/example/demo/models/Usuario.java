@@ -20,7 +20,7 @@ public class Usuario {
     private Boolean activo = true;
     @ManyToOne
     @JoinColumn(name = "id_tipo_usuario", referencedColumnName = "id")
-    private TipoUsuario rol = new TipoUsuario(2L, null);
+    private TipoUsuario rol;
     @ManyToMany
     @JoinTable(
             name = "likes",
