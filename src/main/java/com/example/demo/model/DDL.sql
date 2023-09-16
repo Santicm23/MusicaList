@@ -31,6 +31,8 @@ CREATE TABLE `cancion` (
     `album` varchar(45) NOT NULL,
     `num_likes` int(11) NOT NULL,
     `valoracion` int(11) NOT NULL,
+    `fecha_lanzamiento` date NOT NULL,
+    `activo` tinyint(1) NOT NULL DEFAULT '1',
 --     `sonido` blob NOT NULL,
 --     `portada` blob,
     `id_genero` int(11) NOT NULL,

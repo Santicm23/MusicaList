@@ -1,9 +1,12 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,12 +22,12 @@ public class Usuario {
     private Boolean activo = true;
     @ManyToOne
     @JoinColumn(name = "id_tipo_usuario", referencedColumnName = "id")
-    private TipoUsuario rol;
+    private TipoUsuario rol = new TipoUsuario(2L, null);
     @ManyToMany
     @JoinTable(
             name = "likes",
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_cancion")
     )
-    private List<Cancion> likesDeCanciones;
+    private List<Cancion> likesDeCanciones = new ArrayList<>();
 }
