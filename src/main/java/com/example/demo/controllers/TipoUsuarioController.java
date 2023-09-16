@@ -1,7 +1,7 @@
 package com.example.demo.controllers;
 
-import com.example.demo.model.TipoUsuario;
-import com.example.demo.model.TipoUsuarioRepository;
+import com.example.demo.models.TipoUsuario;
+import com.example.demo.repostories.TipoUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

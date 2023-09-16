@@ -1,5 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.repostories;
 
+import com.example.demo.models.Usuario;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {

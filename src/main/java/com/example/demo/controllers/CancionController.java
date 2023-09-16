@@ -1,7 +1,7 @@
 package com.example.demo.controllers;
 
-import com.example.demo.model.Cancion;
-import com.example.demo.model.CancionRepository;
+import com.example.demo.models.Cancion;
+import com.example.demo.repostories.CancionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
