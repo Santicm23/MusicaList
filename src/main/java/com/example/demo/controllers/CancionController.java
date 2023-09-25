@@ -34,7 +34,12 @@ public class CancionController {
 
     @PostMapping(value = "/cancion", produces = "application/json")
     public Cancion createCancion(@RequestBody Cancion cancion) {
-        return cancionRepository.save(cancion);
+        try {
+            return cancionRepository.save(cancion);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Error al crear la cancion");
+        }
     }
 
     @PutMapping(value = "/cancion/{cid}", produces = "application/json")
@@ -43,15 +48,34 @@ public class CancionController {
 
         if (cancionOptional.isPresent()) {
             Cancion cancionTemp = cancionOptional.get();
-            cancionTemp.setNombre(cancion.getNombre());
-            cancionTemp.setDuracion(cancion.getDuracion());
-            cancionTemp.setGenero(cancion.getGenero());
-            cancionTemp.setAutor(cancion.getAutor());
-            cancionTemp.setAlbum(cancion.getAlbum());
-            cancionTemp.setNumLikes(cancion.getNumLikes());
-            cancionTemp.setValoracion(cancion.getValoracion());
-            cancionTemp.setFechaLanzamiento(cancion.getFechaLanzamiento());
-            cancionTemp.setActive(cancion.getActive());
+
+            if (cancion.getNombre() != null) {
+                cancionTemp.setNombre(cancion.getNombre());
+            }
+            if (cancion.getDuracion() != null) {
+                cancionTemp.setDuracion(cancion.getDuracion());
+            }
+            if (cancion.getGenero() != null) {
+                cancionTemp.setGenero(cancion.getGenero());
+            }
+            if (cancion.getAutor() != null) {
+                cancionTemp.setAutor(cancion.getAutor());
+            }
+            if (cancion.getAlbum() != null) {
+                cancionTemp.setAlbum(cancion.getAlbum());
+            }
+            if (cancion.getNumLikes() != null) {
+                cancionTemp.setNumLikes(cancion.getNumLikes());
+            }
+            if (cancion.getValoracion() != null) {
+                cancionTemp.setValoracion(cancion.getValoracion());
+            }
+            if (cancion.getFechaLanzamiento() != null) {
+                cancionTemp.setFechaLanzamiento(cancion.getFechaLanzamiento());
+            }
+            if (cancion.getActive() != null) {
+                cancionTemp.setActive(cancion.getActive());
+            }
 
             return cancionRepository.save(cancionTemp);
         } else {
