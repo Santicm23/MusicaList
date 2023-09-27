@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,14 +20,22 @@ public class UsuarioController {
 
     @GetMapping(value = "/usuarios", produces = "application/json")
     public Iterable<Usuario> getUsuarios() {
-        return usuarioRepository.findAll();
+        List<Usuario> usuarios = new ArrayList<>();
+
+        usuarioRepository.findAll().forEach(usuario -> {
+            if (usuario.getActivo()) {
+                usuarios.add(usuario);
+            }
+        });
+
+        return usuarios;
     }
 
     @GetMapping(value = "/usuario/{uid}", produces = "application/json")
     public Usuario getUsuarioById(@PathVariable Long uid) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
-        if (usuarioOptional.isPresent()) {
+        if (usuarioOptional.isPresent() && usuarioOptional.get().getActivo()) {
             return usuarioOptional.get();
         } else {
             throw new ResponseStatusException(
@@ -77,7 +87,7 @@ public class UsuarioController {
     public Usuario deleteUsuario(@PathVariable Long uid) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
-        if (usuarioOptional.isPresent()) {
+        if (usuarioOptional.isPresent() && usuarioOptional.get().getActivo()) {
             Usuario usuarioTemp = usuarioOptional.get();
             usuarioTemp.setActivo(false);
 
