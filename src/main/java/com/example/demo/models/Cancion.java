@@ -20,9 +20,9 @@ public class Cancion {
     private String album;
 //    private String portada;
 //    private String sonido;
-    private Long numLikes;
-    private String valoracion;
-    private Timestamp duracion;
+    private Long numLikes = 0L;
+    private Long valoracion;
+    private Long duracion;
     private Date fechaLanzamiento;
     private Boolean active = true;
     @ManyToOne

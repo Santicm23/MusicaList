@@ -16,8 +16,8 @@ public class GeneroController {
     private GeneroRepository generoRepository;
 
     @GetMapping(value = "/generos", produces = "application/json")
-    public String getGeneros() {
-        return generoRepository.findAll().toString();
+    public Iterable<Genero> getGeneros() {
+        return generoRepository.findAll();
     }
 
     @GetMapping(value = "/genero/{id}", produces = "application/json")
