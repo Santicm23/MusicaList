@@ -63,4 +63,45 @@ public class CancionTest {
         Assertions.assertTrue(cancionRecuperada.getActive());
         Assertions.assertEquals("Pop", cancionRecuperada.getGenero().getNombre());
     }
+
+    @Test
+    public void testActualizarCancion() {
+        Cancion cancionGuardada = cancionRepository.save(cancion);
+        Long id = cancionGuardada.getId();
+
+        cancionGuardada.setNombre("Nueva Canción");
+        cancionGuardada.setValoracion(4L);
+        cancionGuardada.setDuracion(180L);
+
+        Cancion cancionActualizada = cancionRepository.save(cancionGuardada);
+        Assertions.assertEquals("Nueva Canción", cancionActualizada.getNombre());
+        Assertions.assertEquals(4L, cancionActualizada.getValoracion());
+        Assertions.assertEquals(180L, cancionActualizada.getDuracion());
+    }
+
+    @Test
+    public void testEliminarCancion() {
+        Cancion cancionGuardada = cancionRepository.save(cancion);
+        Long id = cancionGuardada.getId();
+        cancionRepository.deleteById(id);
+
+
+    }
+
+    @Test
+    public void testBuscarCancionesPorAutor() {
+        // Guardar dos canciones con el mismo autor
+        Cancion cancion1 = new Cancion();
+        cancion1.setNombre("Canción 1");
+        cancion1.setAutor("Autor Común");
+
+        Cancion cancion2 = new Cancion();
+        cancion2.setNombre("Canción 2");
+        cancion2.setAutor("Autor Común");
+
+        cancionRepository.save(cancion1);
+        cancionRepository.save(cancion2);
+
+    }
+
 }
