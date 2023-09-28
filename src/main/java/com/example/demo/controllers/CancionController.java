@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,23 +17,14 @@ public class CancionController {
 
     @GetMapping(value = "/canciones", produces = "application/json")
     public Iterable<Cancion> getCanciones() {
-        // filtrar canciones activas
-        List<Cancion> canciones = new ArrayList<>();
-
-        cancionRepository.findAll().forEach(cancion -> {
-            if (cancion.getActive()) {
-                canciones.add(cancion);
-            }
-        });
-
-        return canciones;
+        return cancionRepository.findAll();
     }
 
     @GetMapping(value = "/cancion/{cid}", produces = "application/json")
     public Cancion getCancionById(@PathVariable Long cid) {
         Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
 
-        if (cancionOptional.isPresent() && cancionOptional.get().getActive()) {
+        if (cancionOptional.isPresent()) {
             return cancionOptional.get();
         } else {
             throw new ResponseStatusException(
@@ -99,7 +88,7 @@ public class CancionController {
     public Cancion deleteCancion(@PathVariable Long cid) {
         Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
 
-        if (cancionOptional.isPresent() && cancionOptional.get().getActive()) {
+        if (cancionOptional.isPresent()) {
             Cancion cancionTemp = cancionOptional.get();
             cancionTemp.setActive(false);
             cancionRepository.save(cancionTemp);
