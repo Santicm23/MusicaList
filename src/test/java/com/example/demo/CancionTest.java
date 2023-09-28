@@ -3,16 +3,19 @@ package com.example.demo;
 import com.example.demo.models.Cancion;
 import com.example.demo.models.Genero;
 import com.example.demo.repostories.CancionRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 public class CancionTest {
 
     @Autowired

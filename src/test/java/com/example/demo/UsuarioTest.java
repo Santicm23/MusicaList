@@ -23,6 +23,7 @@ public class UsuarioTest {
     @Autowired
     protected UsuarioRepository usuarioRepository;
 
+    Long id;
     private Usuario usuario;
 
     @BeforeEach
@@ -60,30 +61,50 @@ public class UsuarioTest {
 
     }
 
+    @Test
+    void crearUsuario() {
+        Usuario usuarioRecuperado = usuarioRepository.save(usuario);
+        id = usuarioRecuperado.getId();
+        assertNotNull(id);
+    }
 
     @Test
     void obtenerUsuarios() {
-
+        List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
+        assertNotNull(usuarios);
+        assertFalse(usuarios.isEmpty());
     }
 
     @Test
     void obtenerUsuario() {
 
+        Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
+        assertNotNull(usuarioRecuperado);
+        assertEquals(usuario.getNombre(), usuarioRecuperado.getNombre());
+        assertEquals(usuario.getCorreo(), usuarioRecuperado.getCorreo());
+        assertEquals(usuario.getContrasena(), usuarioRecuperado.getContrasena());
+        assertTrue(usuarioRecuperado.getActivo());
+        assertEquals(usuario.getRol().getNombre(), usuarioRecuperado.getRol().getNombre());
     }
 
-    @Test
-    void crearUsuario() {
-
-    }
 
     @Test
     void actualizarUsuario() {
+        Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
+        assertNotNull(usuarioRecuperado);
+        usuarioRecuperado.setNombre("Usuario de Prueba Actualizado");
 
+        Usuario usuarioActualizado = usuarioRepository.save(usuarioRecuperado);
+
+        assertEquals("Usuario de Prueba Actualizado", usuarioActualizado.getNombre());
     }
 
     @Test
     void eliminarUsuario() {
+        usuarioRepository.deleteById(id);
 
+        Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
+        assertNull(usuarioRecuperado);
     }
 }
 
