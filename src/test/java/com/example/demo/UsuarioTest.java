@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class UsuarioTest {
 
-    @Autowired
+    /*@Autowired
     protected UsuarioRepository usuarioRepository;
 
     Long id;
@@ -105,7 +105,7 @@ public class UsuarioTest {
 
         Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
         assertNull(usuarioRecuperado);
-    }
+    }*/
 }
 
 

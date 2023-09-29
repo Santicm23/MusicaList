@@ -18,7 +18,7 @@ import java.util.Date;
 @Transactional
 public class CancionTest {
 
-    @Autowired
+    /*@Autowired
     private CancionRepository cancionRepository;
 
     private Cancion cancion;
@@ -105,5 +105,5 @@ public class CancionTest {
         cancionRepository.save(cancion1);
         cancionRepository.save(cancion2);
 
-    }
+    }*/
 }

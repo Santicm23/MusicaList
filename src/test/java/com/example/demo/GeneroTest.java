@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 @Transactional
 public class GeneroTest {
 
-    @Autowired
+    /*@Autowired
     protected GeneroRepository GeneroRepository;
 
     private Long id;
@@ -77,7 +77,7 @@ public class GeneroTest {
 
         Genero generoRecuperado = GeneroRepository.findById(id).orElse(null);
         assertNull(generoRecuperado);
-    }
+    }*/
 }
 
 

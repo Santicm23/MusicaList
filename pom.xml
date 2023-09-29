@@ -16,6 +16,12 @@
 	<description>Proshecto de web :)</description>
 	<properties>
 		<java.version>17</java.version>
+		<!-- Configura las propiedades de SonarQube -->
+		<sonar.host.url>http://app.inphotech.co:9000</sonar.host.url>
+		<sonar.login>squ_1ad13408cb795cb2ce181979896add339b3acda2</sonar.login>
+		<sonar.projectKey>Links</sonar.projectKey>
+		<sonar.projectName>Links</sonar.projectName>
+		<sonar.projectVersion>1.0</sonar.projectVersion>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -61,6 +67,11 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.7.0.1746</version>
 			</plugin>
 		</plugins>
 	</build>

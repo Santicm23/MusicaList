@@ -12,6 +12,8 @@ import java.util.Optional;
 @RestController
 public class CancionController {
 
+    private static final String MENSAJE404 = "Cancion no encontrada";
+
     @Autowired
     private CancionRepository cancionRepository;
 
@@ -28,7 +30,7 @@ public class CancionController {
             return cancionOptional.get();
         } else {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Cancion no encontrada");
+                    HttpStatus.NOT_FOUND, MENSAJE404);
         }
     }
 
@@ -80,7 +82,7 @@ public class CancionController {
             return cancionRepository.save(cancionTemp);
         } else {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Cancion no encontrada");
+                    HttpStatus.NOT_FOUND, MENSAJE404);
         }
     }
 
@@ -96,7 +98,7 @@ public class CancionController {
             return cancionTemp;
         } else {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Cancion no encontrada");
+                    HttpStatus.NOT_FOUND, MENSAJE404);
         }
     }
 }
