@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.models.Cancion;
 import com.example.demo.models.Genero;
 import com.example.demo.repostories.CancionRepository;
+import com.example.demo.repostories.GeneroRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -13,13 +14,18 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 @Transactional
 public class CancionTest {
 
-    /*@Autowired
+    @Autowired
+    private GeneroRepository generoRepository;
+
+    @Autowired
     private CancionRepository cancionRepository;
+
 
     private Cancion cancion;
 
@@ -36,74 +42,63 @@ public class CancionTest {
         cancion.setActive(true);
 
         Genero genero = new Genero();
-        genero.setNombre("Pop");
+        genero.setNombre("Género de Prueba");
+        genero.setDescripcion("Descripción de Prueba");
+
+        genero = generoRepository.save(genero);
 
         cancion.setGenero(genero);
     }
 
-    @AfterEach
-    public void tearDown() {
-        // Borra la canción de la base de datos al finalizar la prueba
-        if (cancion != null && cancion.getId() != null) {
-            cancionRepository.delete(cancion);
-        }
+    @Test
+    void crearCancion() {
+        Cancion cancionRecuperada = cancionRepository.save(cancion);
+
+        Long id = cancionRecuperada.getId();
+        Assertions.assertNotNull(id);
     }
 
     @Test
-    public void testGuardarYRecuperarCancion() {
-        Cancion cancionGuardada = cancionRepository.save(cancion);
-        Long id = cancionGuardada.getId();
+    void obtenerCanciones() {
+        List<Cancion> canciones = (List<Cancion>) cancionRepository.findAll();
+        Assertions.assertNotNull(canciones);
+        Assertions.assertFalse(canciones.isEmpty());
+    }
+
+    @Test
+    void obtenerCancion() {
+        Cancion cancionRecuperada = cancionRepository.save(cancion);
+        Long id = cancionRecuperada.getId();
         Assertions.assertNotNull(id);
 
-        Cancion cancionRecuperada = cancionRepository.findById(id).orElse(null);
+        cancionRecuperada = cancionRepository.findById(id).orElse(null);
         Assertions.assertNotNull(cancionRecuperada);
-        Assertions.assertEquals("Canción de Prueba", cancionRecuperada.getNombre());
-        Assertions.assertEquals("Autor de Prueba", cancionRecuperada.getAutor());
-        Assertions.assertEquals("Álbum de Prueba", cancionRecuperada.getAlbum());
-        Assertions.assertEquals(0L, cancionRecuperada.getNumLikes());
-        Assertions.assertEquals(5L, cancionRecuperada.getValoracion());
-        Assertions.assertEquals(240L, cancionRecuperada.getDuracion());
-        Assertions.assertTrue(cancionRecuperada.getActive());
-        Assertions.assertEquals("Pop", cancionRecuperada.getGenero().getNombre());
     }
 
     @Test
-    public void testActualizarCancion() {
-        Cancion cancionGuardada = cancionRepository.save(cancion);
-        Long id = cancionGuardada.getId();
+    void actualizarCancion() {
+        Cancion cancionRecuperada = cancionRepository.save(cancion);
+        Long id = cancionRecuperada.getId();
+        Assertions.assertNotNull(id);
 
-        cancionGuardada.setNombre("Nueva Canción");
-        cancionGuardada.setValoracion(4L);
-        cancionGuardada.setDuracion(180L);
+        cancionRecuperada = cancionRepository.findById(id).orElse(null);
+        Assertions.assertNotNull(cancionRecuperada);
 
-        Cancion cancionActualizada = cancionRepository.save(cancionGuardada);
-        Assertions.assertEquals("Nueva Canción", cancionActualizada.getNombre());
-        Assertions.assertEquals(4L, cancionActualizada.getValoracion());
-        Assertions.assertEquals(180L, cancionActualizada.getDuracion());
+        cancionRecuperada.setNombre("Canción de Prueba Actualizada");
+        cancionRecuperada = cancionRepository.save(cancionRecuperada);
+
+        Assertions.assertEquals("Canción de Prueba Actualizada", cancionRecuperada.getNombre());
     }
 
     @Test
-    public void testEliminarCancion() {
-        Cancion cancionGuardada = cancionRepository.save(cancion);
-        Long id = cancionGuardada.getId();
+    void eliminarCancion() {
+        Cancion cancionRecuperada = cancionRepository.save(cancion);
+        Long id = cancionRecuperada.getId();
+        Assertions.assertNotNull(id);
+
         cancionRepository.deleteById(id);
 
-
+        cancionRecuperada = cancionRepository.findById(id).orElse(null);
+        Assertions.assertNull(cancionRecuperada);
     }
-
-    @Test
-    public void testBuscarCancionesPorAutor() {
-        // Guardar dos canciones con el mismo autor
-        Cancion cancion1 = new Cancion();
-        cancion1.setNombre("Canción 1");
-        cancion1.setAutor("Autor Común");
-
-        Cancion cancion2 = new Cancion();
-        cancion2.setNombre("Canción 2");
-        cancion2.setAutor("Autor Común");
-
-        cancionRepository.save(cancion1);
-        cancionRepository.save(cancion2);
-
-    }*/
 }
