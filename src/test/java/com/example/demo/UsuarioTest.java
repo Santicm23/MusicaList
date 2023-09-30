@@ -4,8 +4,7 @@ import com.example.demo.models.Cancion;
 import com.example.demo.models.TipoUsuario;
 import com.example.demo.models.Usuario;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,12 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UsuarioTest {
 
-    /*@Autowired
+    @Autowired
     protected UsuarioRepository usuarioRepository;
 
-    Long id;
+    private Long id;
     private Usuario usuario;
 
     @BeforeEach
@@ -32,43 +32,28 @@ public class UsuarioTest {
         usuario.setNombre("Usuario de Prueba");
         usuario.setCorreo("prueba@example.com");
         usuario.setContrasena("password");
-        usuario.setActivo(true);
-
-        TipoUsuario tipoUsuario = new TipoUsuario();
-        tipoUsuario.setNombre("Usuario Normal");
-
-        usuario.setRol(tipoUsuario);
+        usuario.setRol(new TipoUsuario(2L));
 
         List<Cancion> canciones = new ArrayList<>();
 
-
         usuario.setLikesDeCanciones(canciones);
+
+        Usuario usuarioRecuperado = usuarioRepository.save(usuario);
+
+        id = usuarioRecuperado.getId();
     }
 
     @Test
-    public void testGuardarYRecuperarUsuario() {
-        Usuario usuarioGuardado = usuarioRepository.save(usuario);
-        Long id = usuarioGuardado.getId();
-        assertNotNull(id);
-
-        Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
-        assertNotNull(usuarioRecuperado);
-        assertEquals("Usuario de Prueba", usuarioRecuperado.getNombre());
-        assertEquals("prueba@example.com", usuarioRecuperado.getCorreo());
-        assertEquals("password", usuarioRecuperado.getContrasena());
-        assertTrue(usuarioRecuperado.getActivo());
-        assertEquals("Usuario Normal", usuarioRecuperado.getRol().getNombre());
-
-    }
-
-    @Test
+    @Order(1)
     void crearUsuario() {
         Usuario usuarioRecuperado = usuarioRepository.save(usuario);
-        id = usuarioRecuperado.getId();
+
+        Long id = usuarioRecuperado.getId();
         assertNotNull(id);
     }
 
     @Test
+    @Order(2)
     void obtenerUsuarios() {
         List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
         assertNotNull(usuarios);
@@ -76,9 +61,10 @@ public class UsuarioTest {
     }
 
     @Test
+    @Order(3)
     void obtenerUsuario() {
-
         Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
+
         assertNotNull(usuarioRecuperado);
         assertEquals(usuario.getNombre(), usuarioRecuperado.getNombre());
         assertEquals(usuario.getCorreo(), usuarioRecuperado.getCorreo());
@@ -89,23 +75,26 @@ public class UsuarioTest {
 
 
     @Test
+    @Order(4)
     void actualizarUsuario() {
         Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
         assertNotNull(usuarioRecuperado);
-        usuarioRecuperado.setNombre("Usuario de Prueba Actualizado");
+        String nombrePrueba = "Usuario de Prueba Actualizado";
+        usuarioRecuperado.setNombre(nombrePrueba);
 
         Usuario usuarioActualizado = usuarioRepository.save(usuarioRecuperado);
 
-        assertEquals("Usuario de Prueba Actualizado", usuarioActualizado.getNombre());
+        assertEquals(nombrePrueba, usuarioActualizado.getNombre());
     }
 
     @Test
+    @Order(5)
     void eliminarUsuario() {
         usuarioRepository.deleteById(id);
 
         Usuario usuarioRecuperado = usuarioRepository.findById(id).orElse(null);
         assertNull(usuarioRecuperado);
-    }*/
+    }
 }
 
 
