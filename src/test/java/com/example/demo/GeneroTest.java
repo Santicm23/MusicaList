@@ -3,8 +3,7 @@ package com.example.demo;
 import com.example.demo.models.Genero;
 import com.example.demo.repostories.GeneroRepository;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,67 +16,73 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GeneroTest {
 
-    /*@Autowired
+    @Autowired
     protected GeneroRepository GeneroRepository;
 
     private Long id;
     private Genero genero;
 
-
     @BeforeEach
     public void setUp() {
         genero = new Genero();
-        genero.setNombre("Rock");
-        genero.setDescripcion("Rock Description");
+        genero.setNombre("Género de Prueba");
+        genero.setDescripcion("Descripción de Prueba");
 
+        genero = GeneroRepository.save(genero);
+
+        id = genero.getId();
     }
-    @Test
-    public void crearGenero() {
-        Genero nuevoGenero = GeneroRepository.save(genero);
-        id = nuevoGenero.getId();
 
+    @Test
+    @Order(1)
+    void crearGenero() {
+        Genero generoRecuperado = GeneroRepository.save(genero);
+
+        Long id = generoRecuperado.getId();
         assertNotNull(id);
     }
+
     @Test
-    public void obtenerGeneros() {
+    @Order(2)
+    void obtenerGeneros() {
         List<Genero> generos = (List<Genero>) GeneroRepository.findAll();
+
         assertFalse(generos.isEmpty());
     }
+
     @Test
-    public void obtenerGeneroPorId() {
-        Genero generoRecuperado = GeneroRepository.findById(id).orElse(null);
+    @Order(3)
+    void obtenerGenero() {
+        Optional<Genero> generoRecuperado = GeneroRepository.findById(id);
 
-        assertNotNull(generoRecuperado);
+        assertTrue(generoRecuperado.isPresent());
+    }
 
-        assertEquals(id, genero.getId());
+    @Test
+    @Order(4)
+    void actualizarGenero() {
+        genero.setNombre("Género de Prueba Actualizado");
+        genero.setDescripcion("Descripción de Prueba Actualizada");
+
+        Genero generoRecuperado = GeneroRepository.save(genero);
+
         assertEquals(genero.getNombre(), generoRecuperado.getNombre());
         assertEquals(genero.getDescripcion(), generoRecuperado.getDescripcion());
     }
+
     @Test
-    public void actualizarGeneroPorId() {
-        Genero generoRecuperado = GeneroRepository.findById(id).orElse(null);
-
-        assertNotNull(generoRecuperado);
-
-        generoRecuperado.setNombre("Pop");
-        generoRecuperado.setDescripcion("Pop Description");
-
-        Genero updatedGenero = GeneroRepository.save(generoRecuperado);
-
-        assertEquals(id, updatedGenero.getId());
-        assertEquals(genero.getNombre(), updatedGenero.getNombre());
-        assertEquals(genero.getDescripcion(), updatedGenero.getDescripcion());
-    }
-    @Test
-    public void eliminarGeneroPorId() {
-
+    @Order(5)
+    void eliminarGenero() {
         GeneroRepository.deleteById(id);
 
-        Genero generoRecuperado = GeneroRepository.findById(id).orElse(null);
-        assertNull(generoRecuperado);
-    }*/
+        Optional<Genero> generoRecuperado = GeneroRepository.findById(id);
+
+        assertFalse(generoRecuperado.isPresent());
+    }
+
 }
 
 

@@ -5,10 +5,7 @@ import com.example.demo.models.Genero;
 import com.example.demo.repostories.CancionRepository;
 import com.example.demo.repostories.GeneroRepository;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +15,7 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CancionTest {
 
     @Autowired
@@ -39,7 +37,6 @@ public class CancionTest {
         cancion.setValoracion(5L);
         cancion.setDuracion(240L);
         cancion.setFechaLanzamiento(new Date());
-        cancion.setActive(true);
 
         Genero genero = new Genero();
         genero.setNombre("Género de Prueba");
@@ -51,6 +48,7 @@ public class CancionTest {
     }
 
     @Test
+    @Order(1)
     void crearCancion() {
         Cancion cancionRecuperada = cancionRepository.save(cancion);
 
@@ -59,6 +57,7 @@ public class CancionTest {
     }
 
     @Test
+    @Order(2)
     void obtenerCanciones() {
         List<Cancion> canciones = (List<Cancion>) cancionRepository.findAll();
         Assertions.assertNotNull(canciones);
@@ -66,6 +65,7 @@ public class CancionTest {
     }
 
     @Test
+    @Order(3)
     void obtenerCancion() {
         Cancion cancionRecuperada = cancionRepository.save(cancion);
         Long id = cancionRecuperada.getId();
@@ -76,6 +76,7 @@ public class CancionTest {
     }
 
     @Test
+    @Order(4)
     void actualizarCancion() {
         Cancion cancionRecuperada = cancionRepository.save(cancion);
         Long id = cancionRecuperada.getId();
@@ -91,6 +92,7 @@ public class CancionTest {
     }
 
     @Test
+    @Order(5)
     void eliminarCancion() {
         Cancion cancionRecuperada = cancionRepository.save(cancion);
         Long id = cancionRecuperada.getId();
