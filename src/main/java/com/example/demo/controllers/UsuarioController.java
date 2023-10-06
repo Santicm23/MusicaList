@@ -1,5 +1,8 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.LoginRequestDTO;
+import com.example.demo.dto.LoginResponseDTO;
+import com.example.demo.helpers.Hashing;
 import com.example.demo.models.TipoUsuario;
 import com.example.demo.models.Usuario;
 import com.example.demo.repostories.UsuarioRepository;
@@ -21,7 +24,7 @@ public class UsuarioController {
         return usuarioRepository.findAll();
     }
 
-    @GetMapping(value = "/usuario/{uid}", produces = "application/json")
+    @GetMapping(value = "/usuario/{uid}", produces = "application/json", consumes = {"application/json"})
     public Usuario getUsuarioById(@PathVariable Long uid) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
@@ -33,12 +36,13 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping(value = "/usuario", produces = "application/json")
+    @PostMapping(value = "/usuario", produces = "application/json", consumes = {"application/json"})
     public Usuario createUsuario(@RequestBody Usuario usuario) {
         try {
             if (usuario.getRol() == null) {
                 usuario.setRol(new TipoUsuario(2L));
             }
+            //usuario.setContrasena(Hashing.getHash(usuario.getContrasena()));
             return usuarioRepository.save(usuario);
         } catch (Exception e) {
             throw new ResponseStatusException(
@@ -60,7 +64,7 @@ public class UsuarioController {
                 usuarioTemp.setCorreo(usuario.getCorreo());
             }
             if (usuario.getContrasena() != null) {
-                usuarioTemp.setContrasena(usuario.getContrasena());
+                usuarioTemp.setContrasena(Hashing.getHash(usuario.getContrasena()));
             }
             if (usuario.getRol() != null) {
                 usuarioTemp.setRol(usuario.getRol());
@@ -86,5 +90,16 @@ public class UsuarioController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
+    }
+
+    @PostMapping(value = "/login", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginDTO) {
+        Usuario usuariosTemp = usuarioRepository.findByCorreo(loginDTO.getCorreo()).get(0);
+        if (Hashing.checkPassword(loginDTO.getPassword(), usuariosTemp.getContrasena()))
+            return new LoginResponseDTO(usuariosTemp.getId());
+        else
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
     }
 }
