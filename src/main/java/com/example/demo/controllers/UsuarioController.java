@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -95,7 +96,12 @@ public class UsuarioController {
     @PostMapping(value = "/login", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO loginDTO) {
-        Usuario usuariosTemp = usuarioRepository.findByCorreo(loginDTO.getCorreo()).get(0);
+        List<Usuario> usuarios = usuarioRepository.findByCorreo(loginDTO.getCorreo());
+        if (usuarios.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
+        }
+        Usuario usuariosTemp = usuarios.get(0);
         if (Hashing.checkPassword(loginDTO.getPassword(), usuariosTemp.getContrasena()))
             return new LoginResponseDTO(usuariosTemp.getId());
         else
