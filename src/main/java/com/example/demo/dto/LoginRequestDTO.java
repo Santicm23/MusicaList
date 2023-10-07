@@ -7,10 +7,10 @@ import lombok.Setter;
 @Setter
 public class LoginRequestDTO {
     private String correo;
-    private String password;
+    private String contrasena;
 
-    public LoginRequestDTO(String correo, String password) {
+    public LoginRequestDTO(String correo, String contrasena) {
         this.correo = correo;
-        this.password = password;
+        this.contrasena = contrasena;
     }
 }

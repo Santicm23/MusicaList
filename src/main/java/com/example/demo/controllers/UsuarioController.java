@@ -25,7 +25,7 @@ public class UsuarioController {
         return usuarioRepository.findAll();
     }
 
-    @GetMapping(value = "/usuario/{uid}", produces = "application/json", consumes = {"application/json"})
+    @GetMapping(value = "/usuario/{uid}", produces = "application/json")
     public Usuario getUsuarioById(@PathVariable Long uid) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
@@ -37,13 +37,11 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping(value = "/usuario", produces = "application/json", consumes = {"application/json"})
+    @PostMapping(value = "/usuario", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Usuario createUsuario(@RequestBody Usuario usuario) {
+        usuario.setContrasena(Hashing.getHash(usuario.getContrasena()));
         try {
-            if (usuario.getRol() == null) {
-                usuario.setRol(new TipoUsuario(2L));
-            }
-            //usuario.setContrasena(Hashing.getHash(usuario.getContrasena()));
             return usuarioRepository.save(usuario);
         } catch (Exception e) {
             throw new ResponseStatusException(
@@ -102,8 +100,8 @@ public class UsuarioController {
                     HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
         }
         Usuario usuariosTemp = usuarios.get(0);
-        if (Hashing.checkPassword(loginDTO.getPassword(), usuariosTemp.getContrasena()))
-            return new LoginResponseDTO(usuariosTemp.getId());
+        if (Hashing.checkPassword(loginDTO.getContrasena(), usuariosTemp.getContrasena()))
+            return new LoginResponseDTO(usuariosTemp.getId(), usuariosTemp.getRol().getId() == 1L);
         else
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
