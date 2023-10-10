@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -35,8 +37,25 @@ public class CancionController {
     }
 
     @GetMapping(value = "/genero/{gid}/canciones", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Iterable<Cancion> getCancionesByGenero(@PathVariable Long gid) {
         return cancionRepository.findByGeneroId(gid);
+    }
+
+    @GetMapping(value = "buscar/canciones", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Cancion> buscarCanciones(
+            @RequestParam Optional<String> nombre,
+            @RequestParam Optional<String> autor,
+            @RequestParam Optional<String> genero,
+            @RequestParam Optional<String> album
+    ) {
+        List<Cancion> canciones = new ArrayList<>();
+        nombre.ifPresent(s -> canciones.addAll(cancionRepository.findByNombreContaining(s)));
+        autor.ifPresent(s -> canciones.addAll(cancionRepository.findByAutorContaining(s)));
+        genero.ifPresent(s -> canciones.addAll(cancionRepository.findByGeneroNombreContaining(s)));
+        album.ifPresent(s -> canciones.addAll(cancionRepository.findByAlbumContaining(s)));
+        return canciones;
     }
 
     @PostMapping(value = "/cancion", produces = "application/json")

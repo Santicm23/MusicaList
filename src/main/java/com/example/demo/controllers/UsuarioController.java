@@ -3,7 +3,6 @@ package com.example.demo.controllers;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.LoginResponseDTO;
 import com.example.demo.helpers.Hashing;
-import com.example.demo.models.TipoUsuario;
 import com.example.demo.models.Usuario;
 import com.example.demo.repostories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
