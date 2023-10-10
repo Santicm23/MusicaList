@@ -34,6 +34,11 @@ public class CancionController {
         }
     }
 
+    @GetMapping(value = "/genero/{gid}/canciones", produces = "application/json")
+    public Iterable<Cancion> getCancionesByGenero(@PathVariable Long gid) {
+        return cancionRepository.findByGeneroId(gid);
+    }
+
     @PostMapping(value = "/cancion", produces = "application/json")
     public Cancion createCancion(@RequestBody Cancion cancion) {
         try {
