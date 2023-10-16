@@ -16,11 +16,13 @@ public class GeneroController {
     private GeneroRepository generoRepository;
 
     @GetMapping(value = "/generos", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Iterable<Genero> getGeneros() {
         return generoRepository.findAll();
     }
 
     @GetMapping(value = "/genero/{id}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Genero getGeneroById(@PathVariable Long id) {
         Optional<Genero> generoOptional = generoRepository.findById(id);
 
@@ -33,6 +35,7 @@ public class GeneroController {
     }
 
     @PostMapping(value = "/genero", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Genero createGenero(@RequestBody Genero genero) {
         try {
             return generoRepository.save(genero);
@@ -43,6 +46,7 @@ public class GeneroController {
     }
 
     @PutMapping(value = "/genero/{id}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Genero updateGenero(@PathVariable Long id, @RequestBody Genero genero) {
         Optional<Genero> generoOptional = generoRepository.findById(id);
 
@@ -64,6 +68,7 @@ public class GeneroController {
     }
 
     @DeleteMapping(value = "/genero/{id}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public void deleteGenero(@PathVariable Long id) {
         Optional<Genero> generoOptional = generoRepository.findById(id);
 
@@ -74,5 +79,4 @@ public class GeneroController {
                     HttpStatus.NOT_FOUND, "Genero no encontrado");
         }
     }
-
 }

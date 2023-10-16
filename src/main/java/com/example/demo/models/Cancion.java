@@ -21,7 +21,6 @@ public class Cancion {
     private String album;
 //    private String portada;
     private Long numLikes = 0L;
-    private Long valoracion;
     private Time duracion;
     private Date fechaLanzamiento;
     private Boolean active = true;

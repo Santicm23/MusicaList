@@ -99,7 +99,7 @@ public class UsuarioController {
                     HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
         }
         Usuario usuariosTemp = usuarios.get(0);
-        if (Hashing.checkPassword(loginDTO.getContrasena(), usuariosTemp.getContrasena()))
+        if (Hashing.checkPassword(loginDTO.getContrasena(), usuariosTemp.getContrasena()) && usuariosTemp.getActivo())
             return new LoginResponseDTO(usuariosTemp.getId(), usuariosTemp.getRol().getId() == 1L);
         else
             throw new ResponseStatusException(

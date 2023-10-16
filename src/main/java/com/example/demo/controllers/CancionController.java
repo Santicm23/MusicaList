@@ -93,9 +93,6 @@ public class CancionController {
             if (cancion.getNumLikes() != null) {
                 cancionTemp.setNumLikes(cancion.getNumLikes());
             }
-            if (cancion.getValoracion() != null) {
-                cancionTemp.setValoracion(cancion.getValoracion());
-            }
             if (cancion.getFechaLanzamiento() != null) {
                 cancionTemp.setFechaLanzamiento(cancion.getFechaLanzamiento());
             }
