@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,7 +18,7 @@ public class GeneroController {
 
     @GetMapping(value = "/generos", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Iterable<Genero> getGeneros() {
+    public List<Genero> getGeneros() {
         return generoRepository.findByActivoTrue();
     }
 
@@ -73,7 +74,9 @@ public class GeneroController {
         Optional<Genero> generoOptional = generoRepository.findById(id);
 
         if (generoOptional.isPresent()) {
-            generoRepository.delete(generoOptional.get());
+            Genero generoTemp = generoOptional.get();
+            generoTemp.setActivo(false);
+            generoRepository.save(generoTemp);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Genero no encontrado");

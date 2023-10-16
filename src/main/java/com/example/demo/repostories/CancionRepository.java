@@ -6,9 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface CancionRepository extends CrudRepository<Cancion, Long> {
-    Iterable<Cancion> findByGeneroId(Long gid);
+
+    List<Cancion> findByActivoTrue();
+    List<Cancion> findByGeneroId(Long gid);
     List<Cancion> findByNombreContaining(String nombre);
-    List<Cancion> findByAutorContaining(String autor);
+    List<Cancion> findByArtistaContaining(String autor);
     List<Cancion> findByGeneroNombreContaining(String genero);
     List<Cancion> findByAlbumContaining(String album);
 }

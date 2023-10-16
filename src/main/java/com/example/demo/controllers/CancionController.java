@@ -20,8 +20,9 @@ public class CancionController {
     private CancionRepository cancionRepository;
 
     @GetMapping(value = "/canciones", produces = "application/json")
-    public Iterable<Cancion> getCanciones() {
-        return cancionRepository.findAll();
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Cancion> getCanciones() {
+        return cancionRepository.findByActivoTrue();
     }
 
     @GetMapping(value = "/cancion/{cid}", produces = "application/json")
@@ -38,7 +39,7 @@ public class CancionController {
 
     @GetMapping(value = "/genero/{gid}/canciones", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Iterable<Cancion> getCancionesByGenero(@PathVariable Long gid) {
+    public List<Cancion> getCancionesByGenero(@PathVariable Long gid) {
         return cancionRepository.findByGeneroId(gid);
     }
 
@@ -52,13 +53,14 @@ public class CancionController {
     ) {
         List<Cancion> canciones = new ArrayList<>();
         nombre.ifPresent(s -> canciones.addAll(cancionRepository.findByNombreContaining(s)));
-        autor.ifPresent(s -> canciones.addAll(cancionRepository.findByAutorContaining(s)));
+        autor.ifPresent(s -> canciones.addAll(cancionRepository.findByArtistaContaining(s)));
         genero.ifPresent(s -> canciones.addAll(cancionRepository.findByGeneroNombreContaining(s)));
         album.ifPresent(s -> canciones.addAll(cancionRepository.findByAlbumContaining(s)));
         return canciones;
     }
 
     @PostMapping(value = "/cancion", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Cancion createCancion(@RequestBody Cancion cancion) {
         try {
             return cancionRepository.save(cancion);
@@ -69,6 +71,7 @@ public class CancionController {
     }
 
     @PutMapping(value = "/cancion/{cid}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Cancion updateCancion(@PathVariable Long cid, @RequestBody Cancion cancion) {
         Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
 
@@ -84,8 +87,8 @@ public class CancionController {
             if (cancion.getGenero() != null) {
                 cancionTemp.setGenero(cancion.getGenero());
             }
-            if (cancion.getAutor() != null) {
-                cancionTemp.setAutor(cancion.getAutor());
+            if (cancion.getArtista() != null) {
+                cancionTemp.setArtista(cancion.getArtista());
             }
             if (cancion.getAlbum() != null) {
                 cancionTemp.setAlbum(cancion.getAlbum());
@@ -96,8 +99,8 @@ public class CancionController {
             if (cancion.getFechaLanzamiento() != null) {
                 cancionTemp.setFechaLanzamiento(cancion.getFechaLanzamiento());
             }
-            if (cancion.getActive() != null) {
-                cancionTemp.setActive(cancion.getActive());
+            if (cancion.getActivo() != null) {
+                cancionTemp.setActivo(cancion.getActivo());
             }
 
             return cancionRepository.save(cancionTemp);
@@ -108,12 +111,13 @@ public class CancionController {
     }
 
     @DeleteMapping(value = "/cancion/{cid}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Cancion deleteCancion(@PathVariable Long cid) {
         Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
 
         if (cancionOptional.isPresent()) {
             Cancion cancionTemp = cancionOptional.get();
-            cancionTemp.setActive(false);
+            cancionTemp.setActivo(false);
             cancionRepository.save(cancionTemp);
 
             return cancionTemp;
