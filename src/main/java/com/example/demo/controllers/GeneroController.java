@@ -18,7 +18,7 @@ public class GeneroController {
     @GetMapping(value = "/generos", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
     public Iterable<Genero> getGeneros() {
-        return generoRepository.findAll();
+        return generoRepository.findByActivoTrue();
     }
 
     @GetMapping(value = "/genero/{id}", produces = "application/json")
