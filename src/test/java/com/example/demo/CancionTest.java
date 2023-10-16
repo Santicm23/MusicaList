@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
@@ -31,11 +32,10 @@ public class CancionTest {
     public void setUp() {
         cancion = new Cancion();
         cancion.setNombre("Canción de Prueba");
-        cancion.setAutor("Autor de Prueba");
+        cancion.setArtista("Autor de Prueba");
         cancion.setAlbum("Álbum de Prueba");
         cancion.setNumLikes(0L);
-        cancion.setValoracion(5L);
-        cancion.setDuracion(240L);
+        cancion.setDuracion(new Time(0));
         cancion.setFechaLanzamiento(new Date());
 
         Genero genero = new Genero();

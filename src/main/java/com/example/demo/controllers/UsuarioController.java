@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.LoginResponseDTO;
 import com.example.demo.helpers.Hashing;
+import com.example.demo.models.Cancion;
 import com.example.demo.models.Usuario;
 import com.example.demo.repostories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class UsuarioController {
     }
 
     @GetMapping(value = "/usuario/{uid}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Usuario getUsuarioById(@PathVariable Long uid) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
 
@@ -104,5 +106,36 @@ public class UsuarioController {
         else
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
+    }
+
+    @GetMapping(value = "/usuario/{uid}/canciones", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Cancion> getCancionesByUsuario(@PathVariable Long uid) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuarioTemp = usuarioOptional.get();
+            return usuarioTemp.getLikesDeCanciones();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+    }
+
+    @PostMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Usuario addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuarioTemp = usuarioOptional.get();
+            List<Cancion> likes = usuarioTemp.getLikesDeCanciones();
+            likes.add(new Cancion(cid));
+            usuarioTemp.setLikesDeCanciones(likes);
+            return usuarioRepository.save(usuarioTemp);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
     }
 }

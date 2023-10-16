@@ -40,7 +40,9 @@ public class CancionController {
     @GetMapping(value = "/genero/{gid}/canciones", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Cancion> getCancionesByGenero(@PathVariable Long gid) {
-        return cancionRepository.findByGeneroId(gid);
+        List<Cancion> canciones = cancionRepository.findByGeneroId(gid);
+        canciones.removeIf(cancion -> !cancion.getActivo());
+        return canciones;
     }
 
     @GetMapping(value = "buscar/canciones", produces = "application/json")
@@ -56,6 +58,7 @@ public class CancionController {
         autor.ifPresent(s -> canciones.addAll(cancionRepository.findByArtistaContaining(s)));
         genero.ifPresent(s -> canciones.addAll(cancionRepository.findByGeneroNombreContaining(s)));
         album.ifPresent(s -> canciones.addAll(cancionRepository.findByAlbumContaining(s)));
+        canciones.removeIf(cancion -> !cancion.getActivo());
         return canciones;
     }
 
@@ -118,6 +121,40 @@ public class CancionController {
         if (cancionOptional.isPresent()) {
             Cancion cancionTemp = cancionOptional.get();
             cancionTemp.setActivo(false);
+            cancionRepository.save(cancionTemp);
+
+            return cancionTemp;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, MENSAJE404);
+        }
+    }
+
+    @PutMapping(value = "/cancion/{cid}/like", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Cancion likeCancion(@PathVariable Long cid) {
+        Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
+
+        if (cancionOptional.isPresent()) {
+            Cancion cancionTemp = cancionOptional.get();
+            cancionTemp.setNumLikes(cancionTemp.getNumLikes() + 1);
+            cancionRepository.save(cancionTemp);
+
+            return cancionTemp;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, MENSAJE404);
+        }
+    }
+
+    @PutMapping(value = "/cancion/{cid}/dislike", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Cancion dislikeCancion(@PathVariable Long cid) {
+        Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
+
+        if (cancionOptional.isPresent()) {
+            Cancion cancionTemp = cancionOptional.get();
+            cancionTemp.setNumLikes(cancionTemp.getNumLikes() - 1);
             cancionRepository.save(cancionTemp);
 
             return cancionTemp;

@@ -3,6 +3,7 @@ package com.example.demo.models;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Time;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Cancion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +29,8 @@ public class Cancion {
     @ManyToOne
     @JoinColumn(name = "id_genero", referencedColumnName = "id")
     private Genero genero;
+
+    public Cancion(Long id) {
+        this.id = id;
+    }
 }
