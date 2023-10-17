@@ -129,38 +129,4 @@ public class CancionController {
                     HttpStatus.NOT_FOUND, MENSAJE404);
         }
     }
-
-    @PutMapping(value = "/cancion/{cid}/like", produces = "application/json")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public Cancion likeCancion(@PathVariable Long cid) {
-        Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
-
-        if (cancionOptional.isPresent()) {
-            Cancion cancionTemp = cancionOptional.get();
-            cancionTemp.setNumLikes(cancionTemp.getNumLikes() + 1);
-            cancionRepository.save(cancionTemp);
-
-            return cancionTemp;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, MENSAJE404);
-        }
-    }
-
-    @PutMapping(value = "/cancion/{cid}/dislike", produces = "application/json")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public Cancion dislikeCancion(@PathVariable Long cid) {
-        Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
-
-        if (cancionOptional.isPresent()) {
-            Cancion cancionTemp = cancionOptional.get();
-            cancionTemp.setNumLikes(cancionTemp.getNumLikes() - 1);
-            cancionRepository.save(cancionTemp);
-
-            return cancionTemp;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, MENSAJE404);
-        }
-    }
 }

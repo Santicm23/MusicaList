@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -132,6 +133,21 @@ public class UsuarioController {
             List<Cancion> likes = usuarioTemp.getLikesDeCanciones();
             likes.add(new Cancion(cid));
             usuarioTemp.setLikesDeCanciones(likes);
+            return usuarioRepository.save(usuarioTemp);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+    }
+
+    @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Usuario deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuarioTemp = usuarioOptional.get();
+            usuarioTemp.getLikesDeCanciones().removeIf(e -> Objects.equals(e.getId(), cid));
             return usuarioRepository.save(usuarioTemp);
         } else {
             throw new ResponseStatusException(
