@@ -35,15 +35,15 @@ public class UsuarioController {
             return usuarioOptional.get();
         } else {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
+                    HttpStatus.BAD_REQUEST, "Usuario no encontrado");
         }
     }
 
     @PostMapping(value = "/usuario", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
     public Usuario createUsuario(@RequestBody Usuario usuario) {
-        usuario.setContrasena(Hashing.getHash(usuario.getContrasena()));
         try {
+            usuario.setContrasena(Hashing.getHash(usuario.getContrasena()));
             return usuarioRepository.save(usuario);
         } catch (Exception e) {
             throw new ResponseStatusException(
@@ -74,7 +74,7 @@ public class UsuarioController {
             return usuarioRepository.save(usuarioTemp);
         } else {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
+                    HttpStatus.BAD_REQUEST, "Usuario no encontrado");
         }
     }
 

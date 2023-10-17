@@ -10,6 +10,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class CancionController {
@@ -45,20 +47,20 @@ public class CancionController {
         return canciones;
     }
 
-    @GetMapping(value = "buscar/canciones", produces = "application/json")
+    @GetMapping(value = "/buscar/canciones/{filtro}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Cancion> buscarCanciones(
-            @RequestParam Optional<String> nombre,
-            @RequestParam Optional<String> autor,
-            @RequestParam Optional<String> genero,
-            @RequestParam Optional<String> album
+            @PathVariable String filtro
     ) {
-        List<Cancion> canciones = new ArrayList<>();
-        nombre.ifPresent(s -> canciones.addAll(cancionRepository.findByNombreContaining(s)));
-        autor.ifPresent(s -> canciones.addAll(cancionRepository.findByArtistaContaining(s)));
-        genero.ifPresent(s -> canciones.addAll(cancionRepository.findByGeneroNombreContaining(s)));
-        album.ifPresent(s -> canciones.addAll(cancionRepository.findByAlbumContaining(s)));
-        canciones.removeIf(cancion -> !cancion.getActivo());
+        List<Cancion> canciones = Stream.of(
+                        cancionRepository.findByNombreContaining(filtro),
+                        cancionRepository.findByArtistaContaining(filtro),
+                        cancionRepository.findByGeneroNombreContaining(filtro),
+                        cancionRepository.findByAlbumContaining(filtro))
+                .flatMap(List::stream)
+                .distinct()
+                .filter(Cancion::getActivo)
+                .collect(Collectors.toList());
         return canciones;
     }
 
@@ -104,6 +106,9 @@ public class CancionController {
             }
             if (cancion.getActivo() != null) {
                 cancionTemp.setActivo(cancion.getActivo());
+            }
+            if (cancion.getImagen() != null) {
+                cancionTemp.setImagen(cancion.getImagen());
             }
 
             return cancionRepository.save(cancionTemp);
