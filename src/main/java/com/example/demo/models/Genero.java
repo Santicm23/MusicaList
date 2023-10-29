@@ -18,4 +18,13 @@ public class Genero {
     private String descripcion;
     private Boolean activo = true;
     private String imagen;
+
+    public Genero() {
+    }
+
+    public Genero(String nombre, String descripcion, String imagen) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+    }
 }
