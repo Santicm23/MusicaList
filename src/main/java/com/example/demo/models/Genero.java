@@ -22,6 +22,10 @@ public class Genero {
     public Genero() {
     }
 
+    public Genero(Long id) {
+        this.id = id;
+    }
+
     public Genero(String nombre, String descripcion, String imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;

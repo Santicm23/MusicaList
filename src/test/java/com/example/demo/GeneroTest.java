@@ -18,7 +18,7 @@ public class GeneroTest {
     @Autowired
     private GeneroService generoService;
 
-    private Long id;
+    private Long gid;
     private Genero genero;
 
     @BeforeEach
@@ -27,8 +27,8 @@ public class GeneroTest {
         genero = new Genero("Test", "Test", "Test");
         Assertions.assertDoesNotThrow(() -> {
             GeneroDTO generoTemp = generoService.createGenero(genero);
-            id = genero.getId();
-            System.out.println(id);
+            gid = genero.getId();
+
             Assertions.assertEquals(generoTemp.getNombre(), genero.getNombre());
             Assertions.assertEquals(generoTemp.getDescripcion(), genero.getDescripcion());
             Assertions.assertEquals(generoTemp.getImagen(), genero.getImagen());
@@ -38,27 +38,24 @@ public class GeneroTest {
     @Test
     @Order(1)
     public void testGetGeneros() {
-        System.out.println(id);
         Assertions.assertFalse(generoService.getGeneros().isEmpty());
     }
 
     @Test
     @Order(2)
     public void testGetGeneroById() {
-        System.out.println(id);
         Assertions.assertDoesNotThrow(() -> {
-            Long idTemp = generoService.getGeneroById(id).getId();
-            Assertions.assertEquals(idTemp, id);
+            Long idTemp = generoService.getGeneroById(gid).getId();
+            Assertions.assertEquals(idTemp, gid);
         });
     }
 
     @Test
     @Order(3)
     public void testUpdateGenero() {
-        System.out.println(id);
         genero.setNombre("Test2");
         Assertions.assertDoesNotThrow(() -> {
-            GeneroDTO generoTemp = generoService.updateGenero(id, genero);
+            GeneroDTO generoTemp = generoService.updateGenero(gid, genero);
             Assertions.assertEquals(generoTemp.getNombre(), "Test2");
         });
     }
@@ -66,8 +63,7 @@ public class GeneroTest {
     @Test
     @Order(4)
     public void testDeleteGenero() {
-        System.out.println(id);
-        Assertions.assertDoesNotThrow(() -> generoService.deleteGenero(id));
+        Assertions.assertDoesNotThrow(() -> generoService.deleteGenero(gid));
     }
 }
 

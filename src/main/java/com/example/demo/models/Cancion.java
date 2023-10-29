@@ -31,4 +31,14 @@ public class Cancion {
     public Cancion(Long id) {
         this.id = id;
     }
+
+    public Cancion(String nombre, String artista, String album, String imagen, Long idGenero, Date fechaLanzamiento, Time duracion) {
+        this.nombre = nombre;
+        this.artista = artista;
+        this.album = album;
+        this.imagen = imagen;
+        this.genero = new Genero(idGenero);
+        this.fechaLanzamiento = fechaLanzamiento;
+        this.duracion = duracion;
+    }
 }
