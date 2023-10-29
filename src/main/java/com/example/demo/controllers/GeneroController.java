@@ -60,6 +60,9 @@ public class GeneroController {
             if (genero.getDescripcion() != null) {
                 generoTemp.setDescripcion(genero.getDescripcion());
             }
+            if (genero.getImagen() != null) {
+                generoTemp.setImagen(genero.getImagen());
+            }
 
             return generoRepository.save(generoTemp);
         } else {

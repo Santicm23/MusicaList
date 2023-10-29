@@ -52,7 +52,7 @@ public class CancionController {
     public List<Cancion> buscarCanciones(
             @PathVariable String filtro
     ) {
-        List<Cancion> canciones = Stream.of(
+        return Stream.of(
                         cancionRepository.findByNombreContaining(filtro),
                         cancionRepository.findByArtistaContaining(filtro),
                         cancionRepository.findByGeneroNombreContaining(filtro),
@@ -61,7 +61,6 @@ public class CancionController {
                 .distinct()
                 .filter(Cancion::getActivo)
                 .collect(Collectors.toList());
-        return canciones;
     }
 
     @PostMapping(value = "/cancion", produces = "application/json")

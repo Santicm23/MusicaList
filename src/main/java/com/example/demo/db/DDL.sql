@@ -42,9 +42,10 @@ CREATE TABLE `cancion` (
 );
 
 CREATE TABLE `likes` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `id_usuario` int(11) NOT NULL,
     `id_cancion` int(11) NOT NULL,
-    PRIMARY KEY (`id_usuario`, `id_cancion`),
+    PRIMARY KEY (`id`),
     KEY `fk_likes_usuario_idx` (`id_usuario`),
     KEY `fk_likes_cancion_idx` (`id_cancion`),
     CONSTRAINT `fk_likes_cancion` FOREIGN KEY (`id_cancion`) REFERENCES `cancion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,

@@ -2,10 +2,12 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.LoginResponseDTO;
+import com.example.demo.dto.UsuarioDTO;
 import com.example.demo.helpers.Hashing;
 import com.example.demo.models.Cancion;
 import com.example.demo.models.Usuario;
 import com.example.demo.repostories.UsuarioRepository;
+import com.example.demo.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,78 +21,26 @@ import java.util.Optional;
 public class UsuarioController {
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @GetMapping(value = "/usuarios", produces = "application/json")
-    public Iterable<Usuario> getUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioDTO> getUsuarios() {
+        return usuarioService.getUsuarios();
     }
 
     @GetMapping(value = "/usuario/{uid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Usuario getUsuarioById(@PathVariable Long uid) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
-
-        if (usuarioOptional.isPresent()) {
-            return usuarioOptional.get();
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Usuario no encontrado");
-        }
+    public UsuarioDTO getUsuarioById(@PathVariable Long uid) {
+        return usuarioService.getUsuarioById(uid);
     }
 
     @PostMapping(value = "/usuario", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Usuario createUsuario(@RequestBody Usuario usuario) {
-        try {
-            usuario.setContrasena(Hashing.getHash(usuario.getContrasena()));
-            return usuarioRepository.save(usuario);
-        } catch (Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "No se pudo crear el usuario");
-        }
-    }
-
-    @PutMapping(value = "/usuario/{uid}", produces = "application/json")
-    public Usuario updateUsuario(@PathVariable Long uid, @RequestBody Usuario usuario) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
-
-        if (usuarioOptional.isPresent()) {
-            Usuario usuarioTemp = usuarioOptional.get();
-
-            if (usuario.getNombre() != null) {
-                usuarioTemp.setNombre(usuario.getNombre());
-            }
-            if (usuario.getCorreo() != null) {
-                usuarioTemp.setCorreo(usuario.getCorreo());
-            }
-            if (usuario.getContrasena() != null) {
-                usuarioTemp.setContrasena(Hashing.getHash(usuario.getContrasena()));
-            }
-            if (usuario.getRol() != null) {
-                usuarioTemp.setRol(usuario.getRol());
-            }
-
-            return usuarioRepository.save(usuarioTemp);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Usuario no encontrado");
-        }
-    }
-
-    @DeleteMapping(value = "/usuario/{uid}", produces = "application/json")
-    public Usuario deleteUsuario(@PathVariable Long uid) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
-
-        if (usuarioOptional.isPresent()) {
-            Usuario usuarioTemp = usuarioOptional.get();
-            usuarioTemp.setActivo(false);
-
-            return usuarioRepository.save(usuarioTemp);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
+    public UsuarioDTO createUsuario(@RequestBody Usuario usuario) {
+        return usuarioService.createUsuario(usuario);
     }
 
     @PostMapping(value = "/login", produces = "application/json")
@@ -112,46 +62,18 @@ public class UsuarioController {
     @GetMapping(value = "/usuario/{uid}/canciones", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Cancion> getCancionesByUsuario(@PathVariable Long uid) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
-
-        if (usuarioOptional.isPresent()) {
-            Usuario usuarioTemp = usuarioOptional.get();
-            return usuarioTemp.getLikesDeCanciones();
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
+        return usuarioService.getCancionesByUsuario(uid);
     }
 
     @PostMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Usuario addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
-
-        if (usuarioOptional.isPresent()) {
-            Usuario usuarioTemp = usuarioOptional.get();
-            List<Cancion> likes = usuarioTemp.getLikesDeCanciones();
-            likes.add(new Cancion(cid));
-            usuarioTemp.setLikesDeCanciones(likes);
-            return usuarioRepository.save(usuarioTemp);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
+    public UsuarioDTO addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) {
+        return usuarioService.addCancionToUsuario(uid, cid);
     }
 
     @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Usuario deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
-
-        if (usuarioOptional.isPresent()) {
-            Usuario usuarioTemp = usuarioOptional.get();
-            usuarioTemp.getLikesDeCanciones().removeIf(e -> Objects.equals(e.getId(), cid));
-            return usuarioRepository.save(usuarioTemp);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
+    public UsuarioDTO deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) {
+        return usuarioService.deleteCancionFromUsuario(uid, cid);
     }
 }
