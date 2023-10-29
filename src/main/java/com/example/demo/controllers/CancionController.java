@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.Exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.models.Cancion;
 import com.example.demo.services.CancionService;
@@ -21,7 +22,7 @@ public class CancionController {
     }
 
     @GetMapping(value = "/cancion/{cid}", produces = "application/json")
-    public CancionDTO getCancionById(@PathVariable Long cid) {
+    public CancionDTO getCancionById(@PathVariable Long cid) throws StandardRequestException {
         return cancionService.getCancionById(cid);
     }
 
@@ -39,19 +40,19 @@ public class CancionController {
 
     @PostMapping(value = "/cancion", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public CancionDTO createCancion(@RequestBody Cancion cancion) {
+    public CancionDTO createCancion(@RequestBody Cancion cancion) throws StandardRequestException {
         return cancionService.createCancion(cancion);
     }
 
     @PutMapping(value = "/cancion/{cid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public CancionDTO updateCancion(@PathVariable Long cid, @RequestBody Cancion cancion) {
+    public CancionDTO updateCancion(@PathVariable Long cid, @RequestBody Cancion cancion) throws StandardRequestException {
         return cancionService.updateCancion(cid, cancion);
     }
 
     @DeleteMapping(value = "/cancion/{cid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public CancionDTO deleteCancion(@PathVariable Long cid) {
+    public CancionDTO deleteCancion(@PathVariable Long cid) throws StandardRequestException {
         return cancionService.deleteCancion(cid);
     }
 }

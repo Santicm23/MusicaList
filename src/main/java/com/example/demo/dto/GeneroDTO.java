@@ -12,9 +12,6 @@ public class GeneroDTO {
     private String descripcion;
     private String imagen;
 
-    public GeneroDTO() {
-    }
-
     public GeneroDTO(Genero genero) {
         this.id = genero.getId();
         this.nombre = genero.getNombre();

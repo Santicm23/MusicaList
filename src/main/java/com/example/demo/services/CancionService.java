@@ -1,13 +1,13 @@
 package com.example.demo.services;
 
+import com.example.demo.Exceptions.NotFoundRequestException;
+import com.example.demo.Exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.models.Cancion;
 import com.example.demo.repostories.CancionRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,10 +23,9 @@ public class CancionService {
         this.cancionRepository = cancionRepository;
     }
 
-    private Cancion getGeneroFromDB(Long gid) {
-        return cancionRepository.findById(gid).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Genero no encontrado")
+    private Cancion getGeneroFromDB(Long cid) throws StandardRequestException {
+        return cancionRepository.findById(cid).orElseThrow(
+                () -> new NotFoundRequestException("No se encontró la canción con id " + cid)
         );
     }
 
@@ -35,7 +34,7 @@ public class CancionService {
         return canciones.stream().map(CancionDTO::new).toList();
     }
 
-    public CancionDTO getCancionById(Long cid) {
+    public CancionDTO getCancionById(Long cid) throws StandardRequestException {
         return new CancionDTO(getGeneroFromDB(cid));
     }
 
@@ -60,17 +59,21 @@ public class CancionService {
                 .collect(Collectors.toList());
     }
 
-    public CancionDTO createCancion(Cancion cancion) {
-        return new CancionDTO(cancionRepository.save(cancion));
+    public CancionDTO createCancion(Cancion cancion) throws StandardRequestException {
+        try {
+            return new CancionDTO(cancionRepository.save(cancion));
+        } catch (Exception e) {
+            throw new StandardRequestException("No se pudo crear la canción");
+        }
     }
 
-    public CancionDTO updateCancion(Long cid, Cancion cancion) {
+    public CancionDTO updateCancion(Long cid, Cancion cancion) throws StandardRequestException {
         Cancion cancionFromDB = getGeneroFromDB(cid);
         BeanUtils.copyProperties(cancion, cancionFromDB, "activo");
         return new CancionDTO(cancionRepository.save(cancionFromDB));
     }
 
-    public CancionDTO deleteCancion(Long cid) {
+    public CancionDTO deleteCancion(Long cid) throws StandardRequestException {
         Cancion cancion = getGeneroFromDB(cid);
         cancion.setActivo(false);
         return new CancionDTO(cancionRepository.save(cancion));

@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.Exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.LoginResponseDTO;
@@ -31,13 +32,13 @@ public class UsuarioController {
 
     @GetMapping(value = "/usuario/{uid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public UsuarioDTO getUsuarioById(@PathVariable Long uid) {
+    public UsuarioDTO getUsuarioById(@PathVariable Long uid) throws StandardRequestException {
         return usuarioService.getUsuarioById(uid);
     }
 
     @PostMapping(value = "/usuario", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public UsuarioDTO createUsuario(@RequestBody Usuario usuario) {
+    public UsuarioDTO createUsuario(@RequestBody Usuario usuario) throws StandardRequestException {
         return usuarioService.createUsuario(usuario);
     }
 
@@ -59,19 +60,19 @@ public class UsuarioController {
 
     @GetMapping(value = "/usuario/{uid}/canciones", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<CancionDTO> getCancionesByUsuario(@PathVariable Long uid) {
+    public List<CancionDTO> getCancionesByUsuario(@PathVariable Long uid) throws StandardRequestException {
         return usuarioService.getCancionesByUsuario(uid);
     }
 
     @PostMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public UsuarioDTO addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) {
+    public UsuarioDTO addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
         return usuarioService.addCancionToUsuario(uid, cid);
     }
 
     @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public UsuarioDTO deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) {
+    public UsuarioDTO deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
         return usuarioService.deleteCancionFromUsuario(uid, cid);
     }
 }

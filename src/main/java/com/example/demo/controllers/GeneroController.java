@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.Exceptions.StandardRequestException;
 import com.example.demo.dto.GeneroDTO;
 import com.example.demo.models.Genero;
 import com.example.demo.services.GeneroService;
@@ -22,25 +23,25 @@ public class GeneroController {
 
     @GetMapping(value = "/genero/{id}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public GeneroDTO getGeneroById(@PathVariable Long id) {
+    public GeneroDTO getGeneroById(@PathVariable Long id) throws StandardRequestException {
         return generoService.getGeneroById(id);
     }
 
     @PostMapping(value = "/genero", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public GeneroDTO createGenero(@RequestBody Genero genero) {
+    public GeneroDTO createGenero(@RequestBody Genero genero) throws StandardRequestException {
         return generoService.createGenero(genero);
     }
 
     @PutMapping(value = "/genero/{id}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public GeneroDTO updateGenero(@PathVariable Long id, @RequestBody Genero genero) {
+    public GeneroDTO updateGenero(@PathVariable Long id, @RequestBody Genero genero) throws StandardRequestException {
         return generoService.updateGenero(id, genero);
     }
 
     @DeleteMapping(value = "/genero/{id}", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public GeneroDTO deleteGenero(@PathVariable Long id) {
+    public GeneroDTO deleteGenero(@PathVariable Long id) throws StandardRequestException {
         return generoService.deleteGenero(id);
     }
 }
