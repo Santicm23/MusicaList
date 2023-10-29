@@ -28,4 +28,13 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "id_cancion")
     )
     private List<Cancion> likesDeCanciones = new ArrayList<>();
+
+    public Usuario() {
+    }
+
+    public Usuario(String nombre, String correo, String contrasena) {
+        this.nombre = nombre;
+        this.correo = correo;
+        this.contrasena = contrasena;
+    }
 }
