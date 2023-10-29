@@ -1,10 +1,10 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.LoginResponseDTO;
 import com.example.demo.dto.UsuarioDTO;
 import com.example.demo.helpers.Hashing;
-import com.example.demo.models.Cancion;
 import com.example.demo.models.Usuario;
 import com.example.demo.repostories.UsuarioRepository;
 import com.example.demo.services.UsuarioService;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 public class UsuarioController {
@@ -61,7 +59,7 @@ public class UsuarioController {
 
     @GetMapping(value = "/usuario/{uid}/canciones", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<Cancion> getCancionesByUsuario(@PathVariable Long uid) {
+    public List<CancionDTO> getCancionesByUsuario(@PathVariable Long uid) {
         return usuarioService.getCancionesByUsuario(uid);
     }
 

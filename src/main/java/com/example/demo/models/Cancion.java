@@ -1,13 +1,11 @@
 package com.example.demo.models;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity

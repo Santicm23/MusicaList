@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.UsuarioDTO;
 import com.example.demo.models.Cancion;
 import com.example.demo.models.Usuario;
@@ -11,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -24,14 +24,10 @@ public class UsuarioService {
     }
 
     private Usuario getUsuarioFromDB(Long uid) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
-
-        if (usuarioOptional.isPresent()) {
-            return usuarioOptional.get();
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
+        return usuarioRepository.findById(uid).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuario no encontrado")
+        );
     }
 
     public List<UsuarioDTO> getUsuarios() {
@@ -52,8 +48,10 @@ public class UsuarioService {
         }
     }
 
-    public List<Cancion> getCancionesByUsuario(Long uid) {
-        return getUsuarioFromDB(uid).getLikesDeCanciones();
+    public List<CancionDTO> getCancionesByUsuario(Long uid) {
+        Usuario usuario = getUsuarioFromDB(uid);
+        return usuario.getLikesDeCanciones()
+                .stream().map(CancionDTO::new).toList();
     }
 
     public UsuarioDTO addCancionToUsuario(Long uid, Long cid) {
