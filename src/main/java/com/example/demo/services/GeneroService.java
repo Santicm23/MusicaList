@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
-import com.example.demo.Exceptions.NotFoundRequestException;
-import com.example.demo.Exceptions.StandardRequestException;
+import com.example.demo.exceptions.NotFoundRequestException;
+import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.GeneroDTO;
 import com.example.demo.models.Genero;
 import com.example.demo.repostories.GeneroRepository;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GeneroService {
@@ -22,16 +23,18 @@ public class GeneroService {
     }
 
     private Genero getGeneroFromDB(Long gid) throws NotFoundRequestException {
-        return generoRepository.findById(gid).orElseThrow(
-                () -> new NotFoundRequestException(
-                        "Género con id " + gid + " no encontrado"
-                )
-        );
+        Optional<Genero> generoOptional = generoRepository.findById(gid);
+        if (generoOptional.isEmpty() || !generoOptional.get().getActivo()) {
+            throw new NotFoundRequestException(
+                    "Género con id " + gid + " no encontrado"
+            );
+        }
+        return generoOptional.get();
     }
 
     public List<GeneroDTO> getGeneros() {
         List<Genero> generos = generoRepository.findByActivoTrue();
-        return generos.stream().map(GeneroDTO::new).toList();
+        return generos.stream().filter(Genero::getActivo).map(GeneroDTO::new).toList();
     }
 
     public GeneroDTO getGeneroById(Long gid) throws StandardRequestException {

@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
-import com.example.demo.Exceptions.NotFoundRequestException;
-import com.example.demo.Exceptions.StandardRequestException;
+import com.example.demo.exceptions.NotFoundRequestException;
+import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.models.Cancion;
 import com.example.demo.repostories.CancionRepository;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,14 +25,19 @@ public class CancionService {
     }
 
     private Cancion getGeneroFromDB(Long cid) throws StandardRequestException {
-        return cancionRepository.findById(cid).orElseThrow(
-                () -> new NotFoundRequestException("No se encontró la canción con id " + cid)
-        );
+        Optional<Cancion> cancionOptional = cancionRepository.findById(cid);
+
+        if (cancionOptional.isEmpty() || !cancionOptional.get().getActivo()) {
+            throw new NotFoundRequestException(
+                    "Canción con id " + cid + " no encontrada"
+            );
+        }
+        return cancionOptional.get();
     }
 
     public List<CancionDTO> getCanciones() {
         List<Cancion> canciones = cancionRepository.findByActivoTrue();
-        return canciones.stream().map(CancionDTO::new).toList();
+        return canciones.stream().filter(Cancion::getActivo).map(CancionDTO::new).toList();
     }
 
     public CancionDTO getCancionById(Long cid) throws StandardRequestException {

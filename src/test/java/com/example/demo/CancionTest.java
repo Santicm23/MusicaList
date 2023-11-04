@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.dto.CancionDTO;
+import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.models.Cancion;
 import com.example.demo.services.CancionService;
 import com.example.demo.services.GeneroService;
@@ -31,20 +32,18 @@ public class CancionTest {
 
     @BeforeEach
     @Test
-    public void testCreateCancion() {
-        Assertions.assertDoesNotThrow(() -> {
-            gid = generoService.getGeneros().get(0).getId();
+    public void testCreateCancion() throws StandardRequestException {
+        gid = generoService.getGeneros().get(0).getId();
 
-            cancion = new Cancion("Test", "Test", "Test", "Test", gid, new Date(), new Time(0));
-            CancionDTO cancionTemp = cancionService.createCancion(cancion);
-            cid = cancionTemp.getId();
+        cancion = new Cancion("Test", "Test", "Test", "Test", gid, new Date(), new Time(0));
+        CancionDTO cancionTemp = cancionService.createCancion(cancion);
+        cid = cancionTemp.getId();
 
-            Assertions.assertEquals(cancionTemp.getNombre(), cancion.getNombre());
-            Assertions.assertEquals(cancionTemp.getArtista(), cancion.getArtista());
-            Assertions.assertEquals(cancionTemp.getAlbum(), cancion.getAlbum());
-            Assertions.assertEquals(cancionTemp.getImagen(), cancion.getImagen());
-            Assertions.assertEquals(cancionTemp.getGenero().getId(), cancion.getGenero().getId());
-        });
+        Assertions.assertEquals(cancionTemp.getNombre(), cancion.getNombre());
+        Assertions.assertEquals(cancionTemp.getArtista(), cancion.getArtista());
+        Assertions.assertEquals(cancionTemp.getAlbum(), cancion.getAlbum());
+        Assertions.assertEquals(cancionTemp.getImagen(), cancion.getImagen());
+        Assertions.assertEquals(cancionTemp.getGenero().getId(), cancion.getGenero().getId());
     }
 
     @Test
@@ -55,11 +54,9 @@ public class CancionTest {
 
     @Test
     @Order(2)
-    public void testGetCancionById() {
-        Assertions.assertDoesNotThrow(() -> {
-            Long idTemp = cancionService.getCancionById(cid).getId();
-            Assertions.assertEquals(idTemp, cid);
-        });
+    public void testGetCancionById() throws StandardRequestException {
+        Long idTemp = cancionService.getCancionById(cid).getId();
+        Assertions.assertEquals(idTemp, cid);
     }
 
     @Test
@@ -76,17 +73,18 @@ public class CancionTest {
 
     @Test
     @Order(5)
-    public void testUpdateCancion() {
+    public void testUpdateCancion() throws StandardRequestException {
         cancion.setNombre("Test2");
-        Assertions.assertDoesNotThrow(() -> {
-            CancionDTO cancionTemp = cancionService.updateCancion(cid, cancion);
-            Assertions.assertEquals(cancionTemp.getNombre(), "Test2");
-        });
+        CancionDTO cancionTemp = cancionService.updateCancion(cid, cancion);
+        Assertions.assertEquals(cancionTemp.getNombre(), "Test2");
     }
 
     @Test
     @Order(6)
-    public void testDeleteCancion() {
-        Assertions.assertDoesNotThrow(() -> cancionService.deleteCancion(cid));
+    public void testDeleteCancion() throws StandardRequestException {
+        cancionService.deleteCancion(cid);
+        Assertions.assertThrows(StandardRequestException.class, () -> {
+            cancionService.getCancionById(cid);
+        });
     }
 }

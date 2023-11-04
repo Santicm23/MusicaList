@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.dto.GeneroDTO;
+import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.models.Genero;
 import com.example.demo.services.GeneroService;
 import jakarta.transaction.Transactional;
@@ -23,16 +24,14 @@ public class GeneroTest {
 
     @BeforeEach
     @Test
-    public void testCreateGenero() {
+    public void testCreateGenero() throws StandardRequestException {
         genero = new Genero("Test", "Test", "Test");
-        Assertions.assertDoesNotThrow(() -> {
-            GeneroDTO generoTemp = generoService.createGenero(genero);
-            gid = genero.getId();
+        GeneroDTO generoTemp = generoService.createGenero(genero);
+        gid = genero.getId();
 
-            Assertions.assertEquals(generoTemp.getNombre(), genero.getNombre());
-            Assertions.assertEquals(generoTemp.getDescripcion(), genero.getDescripcion());
-            Assertions.assertEquals(generoTemp.getImagen(), genero.getImagen());
-        });
+        Assertions.assertEquals(generoTemp.getNombre(), genero.getNombre());
+        Assertions.assertEquals(generoTemp.getDescripcion(), genero.getDescripcion());
+        Assertions.assertEquals(generoTemp.getImagen(), genero.getImagen());
     }
 
     @Test
@@ -43,27 +42,26 @@ public class GeneroTest {
 
     @Test
     @Order(2)
-    public void testGetGeneroById() {
-        Assertions.assertDoesNotThrow(() -> {
-            Long idTemp = generoService.getGeneroById(gid).getId();
-            Assertions.assertEquals(idTemp, gid);
-        });
+    public void testGetGeneroById() throws StandardRequestException {
+        Long idTemp = generoService.getGeneroById(gid).getId();
+        Assertions.assertEquals(idTemp, gid);
     }
 
     @Test
     @Order(3)
-    public void testUpdateGenero() {
+    public void testUpdateGenero() throws StandardRequestException {
         genero.setNombre("Test2");
-        Assertions.assertDoesNotThrow(() -> {
-            GeneroDTO generoTemp = generoService.updateGenero(gid, genero);
-            Assertions.assertEquals(generoTemp.getNombre(), "Test2");
-        });
+        GeneroDTO generoTemp = generoService.updateGenero(gid, genero);
+        Assertions.assertEquals(generoTemp.getNombre(), "Test2");
     }
 
     @Test
     @Order(4)
-    public void testDeleteGenero() {
-        Assertions.assertDoesNotThrow(() -> generoService.deleteGenero(gid));
+    public void testDeleteGenero() throws StandardRequestException {
+        generoService.deleteGenero(gid);
+        Assertions.assertThrows(StandardRequestException.class, () -> {
+            generoService.getGeneroById(gid);
+        });
     }
 }
 

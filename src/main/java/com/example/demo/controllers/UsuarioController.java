@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.Exceptions.StandardRequestException;
+import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.LoginResponseDTO;

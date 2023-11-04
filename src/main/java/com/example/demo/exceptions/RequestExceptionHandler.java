@@ -1,4 +1,4 @@
-package com.example.demo.Exceptions;
+package com.example.demo.exceptions;
 import java.util.Calendar;
 
 import org.springframework.http.HttpHeaders;

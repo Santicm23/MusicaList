@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
-import com.example.demo.Exceptions.NotFoundRequestException;
-import com.example.demo.Exceptions.StandardRequestException;
+import com.example.demo.exceptions.NotFoundRequestException;
+import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.UsuarioDTO;
 import com.example.demo.models.Cancion;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -24,16 +25,19 @@ public class UsuarioService {
     }
 
     private Usuario getUsuarioFromDB(Long uid) throws NotFoundRequestException {
-        return usuarioRepository.findById(uid).orElseThrow(
-                () -> new NotFoundRequestException(
-                        "Usuario con id " + uid + " no encontrado"
-                )
-        );
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(uid);
+
+        if (usuarioOptional.isEmpty() || !usuarioOptional.get().getActivo()) {
+            throw new NotFoundRequestException(
+                    "Usuario con id " + uid + " no encontrado"
+            );
+        }
+        return usuarioOptional.get();
     }
 
     public List<UsuarioDTO> getUsuarios() {
         List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
-        return usuarios.stream().map(UsuarioDTO::new).toList();
+        return usuarios.stream().filter(Usuario::getActivo).map(UsuarioDTO::new).toList();
     }
 
     public UsuarioDTO getUsuarioById(Long uid) throws StandardRequestException {
