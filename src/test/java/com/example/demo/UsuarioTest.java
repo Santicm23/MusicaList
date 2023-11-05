@@ -26,7 +26,6 @@ public class UsuarioTest {
 
     private Long uid;
     private Long cid;
-    private Usuario usuario;
 
     @BeforeEach
     @Test
@@ -34,7 +33,7 @@ public class UsuarioTest {
 
         cid = cancionService.getCanciones().get(0).getId();
 
-        usuario = new Usuario("Test", "Test", "Test");
+        Usuario usuario = new Usuario("Test", "Test", "Test");
         UsuarioDTO  usuarioTemp = usuarioService.createUsuario(usuario);
         uid = usuarioTemp.getUid();
 

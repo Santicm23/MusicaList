@@ -83,8 +83,6 @@ public class CancionTest {
     @Order(6)
     public void testDeleteCancion() throws StandardRequestException {
         cancionService.deleteCancion(cid);
-        Assertions.assertThrows(StandardRequestException.class, () -> {
-            cancionService.getCancionById(cid);
-        });
+        Assertions.assertThrows(StandardRequestException.class, () -> cancionService.getCancionById(cid));
     }
 }

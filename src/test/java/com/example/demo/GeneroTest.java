@@ -59,9 +59,7 @@ public class GeneroTest {
     @Order(4)
     public void testDeleteGenero() throws StandardRequestException {
         generoService.deleteGenero(gid);
-        Assertions.assertThrows(StandardRequestException.class, () -> {
-            generoService.getGeneroById(gid);
-        });
+        Assertions.assertThrows(StandardRequestException.class, () -> generoService.getGeneroById(gid));
     }
 }
 
