@@ -11,6 +11,7 @@ import com.example.demo.repostories.UsuarioRepository;
 import com.example.demo.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,24 +26,24 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @GetMapping(value = "/usuarios", produces = "application/json")
+    @GetMapping(value = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UsuarioDTO> getUsuarios() {
         return usuarioService.getUsuarios();
     }
 
-    @GetMapping(value = "/usuario/{uid}", produces = "application/json")
+    @GetMapping(value = "/usuario/{uid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public UsuarioDTO getUsuarioById(@PathVariable Long uid) throws StandardRequestException {
         return usuarioService.getUsuarioById(uid);
     }
 
-    @PostMapping(value = "/usuario", produces = "application/json")
+    @PostMapping(value = "/usuario", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public UsuarioDTO createUsuario(@RequestBody Usuario usuario) throws StandardRequestException {
         return usuarioService.createUsuario(usuario);
     }
 
-    @PostMapping(value = "/login", produces = "application/json")
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO loginDTO) {
         List<Usuario> usuarios = usuarioRepository.findByCorreo(loginDTO.getCorreo());
@@ -58,20 +59,20 @@ public class UsuarioController {
                     HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
     }
 
-    @GetMapping(value = "/usuario/{uid}/canciones", produces = "application/json")
+    @GetMapping(value = "/usuario/{uid}/canciones", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public List<CancionDTO> getCancionesByUsuario(@PathVariable Long uid) throws StandardRequestException {
         return usuarioService.getCancionesByUsuario(uid);
     }
 
-    @PostMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping(value = "/usuario/{uid}/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
     public UsuarioDTO addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
         return usuarioService.addCancionToUsuario(uid, cid);
     }
 
-    @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = "application/json")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
     public UsuarioDTO deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
         return usuarioService.deleteCancionFromUsuario(uid, cid);
     }
