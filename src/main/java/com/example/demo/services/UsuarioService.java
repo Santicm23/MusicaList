@@ -1,9 +1,12 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.LoginRequestDTO;
+import com.example.demo.dto.LoginResponseDTO;
 import com.example.demo.exceptions.NotFoundRequestException;
 import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.UsuarioDTO;
+import com.example.demo.helpers.Hashing;
 import com.example.demo.models.Cancion;
 import com.example.demo.models.Usuario;
 import com.example.demo.repostories.UsuarioRepository;
@@ -50,6 +53,18 @@ public class UsuarioService {
         } catch (Exception e) {
             throw new StandardRequestException("No se pudo crear el usuario");
         }
+    }
+
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) throws StandardRequestException {
+        List<Usuario> usuarios = usuarioRepository.findByCorreo(loginRequestDTO.getCorreo());
+        if (usuarios.isEmpty()) {
+            throw new StandardRequestException("Usuario o contraseña incorrectos");
+        }
+        Usuario usuario = usuarios.get(0);
+        if (usuario.getActivo() && Hashing.checkPassword(loginRequestDTO.getContrasena(), usuario.getContrasena()))
+            return new LoginResponseDTO(usuario.getId(), usuario.getRol().getId() == 1L);
+        else
+            throw new StandardRequestException("Usuario o contraseña incorrectos");
     }
 
     public List<CancionDTO> getCancionesByUsuario(Long uid) throws StandardRequestException {

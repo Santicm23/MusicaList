@@ -38,25 +38,15 @@ public class UsuarioController {
     }
 
     @PostMapping(value = "/usuario", produces = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
     public UsuarioDTO createUsuario(@RequestBody Usuario usuario) throws StandardRequestException {
         return usuarioService.createUsuario(usuario);
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin(origins = "http://localhost:4200")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginDTO) {
-        List<Usuario> usuarios = usuarioRepository.findByCorreo(loginDTO.getCorreo());
-        if (usuarios.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
-        }
-        Usuario usuariosTemp = usuarios.get(0);
-        if (Hashing.checkPassword(loginDTO.getContrasena(), usuariosTemp.getContrasena()) && usuariosTemp.getActivo())
-            return new LoginResponseDTO(usuariosTemp.getId(), usuariosTemp.getRol().getId() == 1L);
-        else
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Usuario o contraseña incorrectos");
+    @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginDTO) throws StandardRequestException {
+        return usuarioService.login(loginDTO);
     }
 
     @GetMapping(value = "/usuario/{uid}/canciones", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,13 +56,13 @@ public class UsuarioController {
     }
 
     @PostMapping(value = "/usuario/{uid}/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
+    @CrossOrigin(origins = "http://localhost:4200")
     public UsuarioDTO addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
         return usuarioService.addCancionToUsuario(uid, cid);
     }
 
     @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
+    @CrossOrigin(origins = "http://localhost:4200")
     public UsuarioDTO deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
         return usuarioService.deleteCancionFromUsuario(uid, cid);
     }
