@@ -3,7 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.LoginRequestDTO;
-import com.example.demo.dto.LoginResponseDTO;
+import com.example.demo.dto.InfoUsuarioDTO;
 import com.example.demo.dto.UsuarioDTO;
 import com.example.demo.models.Usuario;
 import com.example.demo.services.UsuarioService;
@@ -30,15 +30,15 @@ public class UsuarioController {
         return usuarioService.getUsuarioById(uid);
     }
 
-    @PostMapping(value = "/usuario", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/public/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
     public UsuarioDTO createUsuario(@RequestBody Usuario usuario) throws StandardRequestException {
         return usuarioService.createUsuario(usuario);
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/public/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081"})
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginDTO) throws StandardRequestException {
+    public InfoUsuarioDTO login(@RequestBody LoginRequestDTO loginDTO) throws StandardRequestException {
         return usuarioService.login(loginDTO);
     }
 
