@@ -29,11 +29,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .addFilterAfter(jwtFiltroAutorizacion, UsernamePasswordAuthenticationFilter.class).authorizeRequests(authorize -> authorize
+        http.csrf().disable().cors().and().addFilterAfter(jwtFiltroAutorizacion,
+                UsernamePasswordAuthenticationFilter.class).authorizeRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/public/**").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();
     }
+
 }
