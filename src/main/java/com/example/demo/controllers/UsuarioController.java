@@ -5,15 +5,11 @@ import com.example.demo.dto.CancionDTO;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.LoginResponseDTO;
 import com.example.demo.dto.UsuarioDTO;
-import com.example.demo.helpers.Hashing;
 import com.example.demo.models.Usuario;
-import com.example.demo.repostories.UsuarioRepository;
 import com.example.demo.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,9 +18,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @GetMapping(value = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UsuarioDTO> getUsuarios() {
