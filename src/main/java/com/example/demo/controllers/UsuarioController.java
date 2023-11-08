@@ -16,6 +16,8 @@ import java.util.List;
 @RestController
 public class UsuarioController {
 
+    private final String AUTHORIZATION_HEADER = "Authorization";
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -26,8 +28,9 @@ public class UsuarioController {
 
     @GetMapping(value = "/usuario/{uid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
-    public UsuarioDTO getUsuarioById(@PathVariable Long uid) throws StandardRequestException {
-        return usuarioService.getUsuarioById(uid);
+    public UsuarioDTO getUsuarioById(
+            @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long uid) throws StandardRequestException {
+        return usuarioService.getUsuarioById(token, uid);
     }
 
     @PostMapping(value = "/public/signup", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,13 +53,15 @@ public class UsuarioController {
 
     @PostMapping(value = "/usuario/{uid}/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
-    public UsuarioDTO addCancionToUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
-        return usuarioService.addCancionToUsuario(uid, cid);
+    public UsuarioDTO addCancionToUsuario(
+            @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
+        return usuarioService.addCancionToUsuario(token, uid, cid);
     }
 
     @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
-    public UsuarioDTO deleteCancionFromUsuario(@PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
-        return usuarioService.deleteCancionFromUsuario(uid, cid);
+    public UsuarioDTO deleteCancionFromUsuario(
+            @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
+        return usuarioService.deleteCancionFromUsuario(token, uid, cid);
     }
 }

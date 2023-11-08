@@ -21,10 +21,12 @@ import java.util.Optional;
 public class UsuarioService {
 
     UsuarioRepository usuarioRepository;
+    JwtService jwtService;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, JwtService jwtService) {
         this.usuarioRepository = usuarioRepository;
+        this.jwtService = jwtService;
     }
 
     private Usuario getUsuarioFromDB(Long uid) throws NotFoundRequestException {
@@ -43,7 +45,8 @@ public class UsuarioService {
         return usuarios.stream().filter(Usuario::getActivo).map(UsuarioDTO::new).toList();
     }
 
-    public UsuarioDTO getUsuarioById(Long uid) throws StandardRequestException {
+    public UsuarioDTO getUsuarioById(String token, Long uid) throws StandardRequestException {
+        jwtService.requiresSameId(token, uid);
         return new UsuarioDTO(getUsuarioFromDB(uid));
     }
 
@@ -73,13 +76,15 @@ public class UsuarioService {
                 .stream().map(CancionDTO::new).toList();
     }
 
-    public UsuarioDTO addCancionToUsuario(Long uid, Long cid) throws StandardRequestException {
+    public UsuarioDTO addCancionToUsuario(String token, Long uid, Long cid) throws StandardRequestException {
+        jwtService.requiresSameId(token, uid);
         Usuario usuario = getUsuarioFromDB(uid);
         usuario.getLikesDeCanciones().add(new Cancion(cid));
         return new UsuarioDTO(usuarioRepository.save(usuario));
     }
 
-    public UsuarioDTO deleteCancionFromUsuario(Long uid, Long cid) throws StandardRequestException {
+    public UsuarioDTO deleteCancionFromUsuario(String token, Long uid, Long cid) throws StandardRequestException {
+        jwtService.requiresSameId(token, uid);
         Usuario usuario = getUsuarioFromDB(uid);
         usuario.getLikesDeCanciones().removeIf(cancion -> Objects.equals(cancion.getId(), cid));
         return new UsuarioDTO(usuarioRepository.save(usuario));

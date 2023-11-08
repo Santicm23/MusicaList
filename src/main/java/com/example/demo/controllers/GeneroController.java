@@ -13,6 +13,8 @@ import java.util.List;
 @RestController
 public class GeneroController {
 
+    private final String AUTHORIZATION_HEADER = "Authorization";
+
     @Autowired
     private GeneroService generoService;
 
@@ -30,19 +32,22 @@ public class GeneroController {
 
     @PostMapping(value = "/genero", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
-    public GeneroDTO createGenero(@RequestBody Genero genero) throws StandardRequestException {
-        return generoService.createGenero(genero);
+    public GeneroDTO createGenero(
+            @RequestHeader(name = AUTHORIZATION_HEADER) String token, @RequestBody Genero genero) throws StandardRequestException {
+        return generoService.createGenero(token, genero);
     }
 
     @PutMapping(value = "/genero/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
-    public GeneroDTO updateGenero(@PathVariable Long id, @RequestBody Genero genero) throws StandardRequestException {
-        return generoService.updateGenero(id, genero);
+    public GeneroDTO updateGenero(
+            @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long id, @RequestBody Genero genero) throws StandardRequestException {
+        return generoService.updateGenero(token, id, genero);
     }
 
     @DeleteMapping(value = "/genero/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
-    public GeneroDTO deleteGenero(@PathVariable Long id) throws StandardRequestException {
-        return generoService.deleteGenero(id);
+    public GeneroDTO deleteGenero(
+            @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long id) throws StandardRequestException {
+        return generoService.deleteGenero(token, id);
     }
 }

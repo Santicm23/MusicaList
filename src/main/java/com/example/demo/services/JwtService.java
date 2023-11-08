@@ -37,11 +37,34 @@ public class JwtService {
         } else if (response.statusCode() == 401) {
             throw new UnauthorizedRequestException("Token inválido");
         } else if (response.statusCode() == 403) {
-            System.out.println(response.body());
             throw new ForbiddenRequestException("Token expirado");
         } else {
             RequestErrorMessage requestErrorMessage = gson.fromJson(response.body(), RequestErrorMessage.class);
             throw new RuntimeException(requestErrorMessage.message);
+        }
+    }
+
+    public void requiresAdmin(String token) throws UnauthorizedRequestException, ForbiddenRequestException {
+        try {
+            InfoUsuarioDTO infoUsuarioDTO = getInfo(token);
+            if (!infoUsuarioDTO.getAdmin()) {
+                throw new ForbiddenRequestException("No tiene permisos para realizar esta acción");
+            }
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void requiresSameId(String token, Long id) throws UnauthorizedRequestException, ForbiddenRequestException {
+        try {
+            InfoUsuarioDTO infoUsuarioDTO = getInfo(token);
+            if (!infoUsuarioDTO.getId().equals(id)) {
+                throw new ForbiddenRequestException("No tiene permisos para realizar esta acción");
+            }
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

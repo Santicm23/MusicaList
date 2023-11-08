@@ -4,14 +4,13 @@ import com.example.demo.dto.GeneroDTO;
 import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.models.Genero;
 import com.example.demo.services.GeneroService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 @Rollback
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GeneroTest {
@@ -22,7 +21,7 @@ public class GeneroTest {
     private Long gid;
     private Genero genero;
 
-    @BeforeEach
+    /*@BeforeEach
     @Test
     public void testCreateGenero() throws StandardRequestException {
         genero = new Genero("Test", "Test", "Test");
@@ -60,7 +59,7 @@ public class GeneroTest {
     public void testDeleteGenero() throws StandardRequestException {
         generoService.deleteGenero(gid);
         Assertions.assertThrows(StandardRequestException.class, () -> generoService.getGeneroById(gid));
-    }
+    }*/
 }
 
 

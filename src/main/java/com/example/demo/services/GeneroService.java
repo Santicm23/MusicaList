@@ -17,9 +17,12 @@ public class GeneroService {
 
     GeneroRepository generoRepository;
 
+    JwtService jwtService;
+
     @Autowired
-    public GeneroService(GeneroRepository generoRepository) {
+    public GeneroService(GeneroRepository generoRepository, JwtService jwtService) {
         this.generoRepository = generoRepository;
+        this.jwtService = jwtService;
     }
 
     private Genero getGeneroFromDB(Long gid) throws NotFoundRequestException {
@@ -41,7 +44,8 @@ public class GeneroService {
         return new GeneroDTO(getGeneroFromDB(gid));
     }
 
-    public GeneroDTO createGenero(Genero genero) throws StandardRequestException {
+    public GeneroDTO createGenero(String token, Genero genero) throws StandardRequestException {
+        jwtService.requiresAdmin(token);
         try {
             return new GeneroDTO(generoRepository.save(genero));
         } catch (Exception e) {
@@ -50,13 +54,15 @@ public class GeneroService {
         }
     }
 
-    public GeneroDTO updateGenero(Long gid, Genero genero) throws StandardRequestException {
+    public GeneroDTO updateGenero(String token, Long gid, Genero genero) throws StandardRequestException {
+        jwtService.requiresAdmin(token);
         Genero generoFromDB = getGeneroFromDB(gid);
         BeanUtils.copyProperties(genero, generoFromDB, "activo");
         return new GeneroDTO(generoRepository.save(generoFromDB));
     }
 
-    public GeneroDTO deleteGenero(Long gid) throws StandardRequestException {
+    public GeneroDTO deleteGenero(String token, Long gid) throws StandardRequestException {
+        jwtService.requiresAdmin(token);
         Genero genero = getGeneroFromDB(gid);
         genero.setActivo(false);
         return new GeneroDTO(generoRepository.save(genero));
