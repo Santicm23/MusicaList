@@ -26,7 +26,7 @@ public class UsuarioTest {
     private Long uid;
     private Long cid;
 
-    /*@BeforeEach
+    @BeforeEach
     @Test
     public void testCreateUsuario() throws StandardRequestException {
 
@@ -65,14 +65,16 @@ public class UsuarioTest {
     @Test
     @Order(4)
     public void testAddCancionToUsuario() throws StandardRequestException {
-        Assertions.assertFalse(usuarioService.addCancionToUsuario(uid, cid).getCanciones().isEmpty());
+        usuarioService.addCancionToUsuario(uid, cid);
+        Assertions.assertFalse(usuarioService.getCancionesByUsuario(uid).isEmpty());
     }
 
     @Test
     @Order(5)
     public void testDeleteCancionFromUsuario() throws StandardRequestException {
-        Assertions.assertTrue(usuarioService.deleteCancionFromUsuario(uid, cid).getCanciones().isEmpty());
-    }*/
+        usuarioService.deleteCancionFromUsuario(uid, cid);
+        Assertions.assertTrue(usuarioService.getCancionesByUsuario(uid).isEmpty());
+    }
 }
 
 

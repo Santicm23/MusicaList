@@ -4,6 +4,7 @@ import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.GeneroDTO;
 import com.example.demo.models.Genero;
 import com.example.demo.services.GeneroService;
+import com.example.demo.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class GeneroController {
 
     @Autowired
     private GeneroService generoService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping(value = "/generos", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
@@ -34,20 +38,23 @@ public class GeneroController {
     @CrossOrigin(origins = "http://localhost:4200")
     public GeneroDTO createGenero(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @RequestBody Genero genero) throws StandardRequestException {
-        return generoService.createGenero(token, genero);
+        jwtService.requiresAdmin(token);
+        return generoService.createGenero(genero);
     }
 
     @PutMapping(value = "/genero/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public GeneroDTO updateGenero(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long id, @RequestBody Genero genero) throws StandardRequestException {
-        return generoService.updateGenero(token, id, genero);
+        jwtService.requiresAdmin(token);
+        return generoService.updateGenero(id, genero);
     }
 
     @DeleteMapping(value = "/genero/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public GeneroDTO deleteGenero(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long id) throws StandardRequestException {
-        return generoService.deleteGenero(token, id);
+        jwtService.requiresAdmin(token);
+        return generoService.deleteGenero(id);
     }
 }

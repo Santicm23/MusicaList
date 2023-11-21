@@ -21,7 +21,7 @@ public class GeneroTest {
     private Long gid;
     private Genero genero;
 
-    /*@BeforeEach
+    @BeforeEach
     @Test
     public void testCreateGenero() throws StandardRequestException {
         genero = new Genero("Test", "Test", "Test");
@@ -59,7 +59,7 @@ public class GeneroTest {
     public void testDeleteGenero() throws StandardRequestException {
         generoService.deleteGenero(gid);
         Assertions.assertThrows(StandardRequestException.class, () -> generoService.getGeneroById(gid));
-    }*/
+    }
 }
 
 

@@ -19,12 +19,9 @@ public class CancionService {
 
     CancionRepository cancionRepository;
 
-    JwtService jwtService;
-
     @Autowired
-    public CancionService(CancionRepository cancionRepository, JwtService jwtService) {
+    public CancionService(CancionRepository cancionRepository) {
         this.cancionRepository = cancionRepository;
-        this.jwtService = jwtService;
     }
 
     private Cancion getGeneroFromDB(Long cid) throws StandardRequestException {
@@ -68,8 +65,7 @@ public class CancionService {
                 .collect(Collectors.toList());
     }
 
-    public CancionDTO createCancion(String token, Cancion cancion) throws StandardRequestException {
-        jwtService.requiresAdmin(token);
+    public CancionDTO createCancion(Cancion cancion) throws StandardRequestException {
         try {
             return new CancionDTO(cancionRepository.save(cancion));
         } catch (Exception e) {
@@ -77,15 +73,13 @@ public class CancionService {
         }
     }
 
-    public CancionDTO updateCancion(String token, Long cid, Cancion cancion) throws StandardRequestException {
-        jwtService.requiresAdmin(token);
+    public CancionDTO updateCancion(Long cid, Cancion cancion) throws StandardRequestException {
         Cancion cancionFromDB = getGeneroFromDB(cid);
         BeanUtils.copyProperties(cancion, cancionFromDB, "activo");
         return new CancionDTO(cancionRepository.save(cancionFromDB));
     }
 
-    public CancionDTO deleteCancion(String token, Long cid) throws StandardRequestException {
-        jwtService.requiresAdmin(token);
+    public CancionDTO deleteCancion(Long cid) throws StandardRequestException {
         Cancion cancion = getGeneroFromDB(cid);
         cancion.setActivo(false);
         return new CancionDTO(cancionRepository.save(cancion));

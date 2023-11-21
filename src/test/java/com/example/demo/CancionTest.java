@@ -29,7 +29,7 @@ public class CancionTest {
     private Long gid;
     private Cancion cancion;
 
-    /*@BeforeEach
+    @BeforeEach
     @Test
     public void testCreateCancion() throws StandardRequestException {
         gid = generoService.getGeneros().get(0).getId();
@@ -83,5 +83,5 @@ public class CancionTest {
     public void testDeleteCancion() throws StandardRequestException {
         cancionService.deleteCancion(cid);
         Assertions.assertThrows(StandardRequestException.class, () -> cancionService.getCancionById(cid));
-    }*/
+    }
 }

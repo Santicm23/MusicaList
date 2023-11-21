@@ -6,6 +6,7 @@ import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.InfoUsuarioDTO;
 import com.example.demo.dto.UsuarioDTO;
 import com.example.demo.models.Usuario;
+import com.example.demo.services.JwtService;
 import com.example.demo.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,6 +22,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @GetMapping(value = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UsuarioDTO> getUsuarios() {
         return usuarioService.getUsuarios();
@@ -30,7 +34,8 @@ public class UsuarioController {
     @CrossOrigin(origins = "http://localhost:4200")
     public UsuarioDTO getUsuarioById(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long uid) throws StandardRequestException {
-        return usuarioService.getUsuarioById(token, uid);
+        jwtService.requiresSameId(token, uid);
+        return usuarioService.getUsuarioById(uid);
     }
 
     @PostMapping(value = "/public/signup", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,13 +60,15 @@ public class UsuarioController {
     @CrossOrigin(origins = "http://localhost:4200")
     public UsuarioDTO addCancionToUsuario(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
-        return usuarioService.addCancionToUsuario(token, uid, cid);
+        jwtService.requiresSameId(token, uid);
+        return usuarioService.addCancionToUsuario(uid, cid);
     }
 
     @DeleteMapping(value = "/usuario/{uid}/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public UsuarioDTO deleteCancionFromUsuario(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long uid, @PathVariable Long cid) throws StandardRequestException {
-        return usuarioService.deleteCancionFromUsuario(token, uid, cid);
+        jwtService.requiresSameId(token, uid);
+        return usuarioService.deleteCancionFromUsuario(uid, cid);
     }
 }

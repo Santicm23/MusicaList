@@ -4,6 +4,7 @@ import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
 import com.example.demo.models.Cancion;
 import com.example.demo.services.CancionService;
+import com.example.demo.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class CancionController {
 
     @Autowired
     private CancionService cancionService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping(value = "/canciones", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
@@ -45,20 +49,23 @@ public class CancionController {
     @CrossOrigin(origins = "http://localhost:4200")
     public CancionDTO createCancion(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @RequestBody Cancion cancion) throws StandardRequestException {
-        return cancionService.createCancion(token, cancion);
+        jwtService.requiresAdmin(token);
+        return cancionService.createCancion(cancion);
     }
 
     @PutMapping(value = "/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public CancionDTO updateCancion(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long cid, @RequestBody Cancion cancion) throws StandardRequestException {
-        return cancionService.updateCancion(token, cid, cancion);
+        jwtService.requiresAdmin(token);
+        return cancionService.updateCancion(cid, cancion);
     }
 
     @DeleteMapping(value = "/cancion/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "http://localhost:4200")
     public CancionDTO deleteCancion(
             @RequestHeader(name = AUTHORIZATION_HEADER) String token, @PathVariable Long cid) throws StandardRequestException {
-        return cancionService.deleteCancion(token, cid);
+        jwtService.requiresAdmin(token);
+        return cancionService.deleteCancion(cid);
     }
 }
