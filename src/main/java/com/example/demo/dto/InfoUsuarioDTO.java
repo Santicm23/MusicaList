@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.models.TipoUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponseDTO {
+public class InfoUsuarioDTO {
     private Long id;
     private Boolean admin;
 }

@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.LoginRequestDTO;
-import com.example.demo.dto.LoginResponseDTO;
+import com.example.demo.dto.InfoUsuarioDTO;
 import com.example.demo.exceptions.NotFoundRequestException;
 import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.dto.CancionDTO;
@@ -55,14 +55,14 @@ public class UsuarioService {
         }
     }
 
-    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) throws StandardRequestException {
+    public InfoUsuarioDTO login(LoginRequestDTO loginRequestDTO) throws StandardRequestException {
         List<Usuario> usuarios = usuarioRepository.findByCorreo(loginRequestDTO.getCorreo());
         if (usuarios.isEmpty()) {
             throw new StandardRequestException("Usuario o contraseña incorrectos");
         }
         Usuario usuario = usuarios.get(0);
         if (usuario.getActivo() && Hashing.checkPassword(loginRequestDTO.getContrasena(), usuario.getContrasena()))
-            return new LoginResponseDTO(usuario.getId(), usuario.getRol().getId() == 1L);
+            return new InfoUsuarioDTO(usuario.getId(), usuario.getRol().getId() == 1L);
         else
             throw new StandardRequestException("Usuario o contraseña incorrectos");
     }

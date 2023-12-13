@@ -5,7 +5,6 @@ import com.example.demo.exceptions.StandardRequestException;
 import com.example.demo.models.Cancion;
 import com.example.demo.services.CancionService;
 import com.example.demo.services.GeneroService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +14,7 @@ import java.sql.Time;
 import java.util.Date;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 @Rollback
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CancionTest {

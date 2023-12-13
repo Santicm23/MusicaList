@@ -6,14 +6,13 @@ import com.example.demo.helpers.Hashing;
 import com.example.demo.models.Usuario;
 import com.example.demo.services.CancionService;
 import com.example.demo.services.UsuarioService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 @Rollback
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UsuarioTest {
@@ -66,13 +65,15 @@ public class UsuarioTest {
     @Test
     @Order(4)
     public void testAddCancionToUsuario() throws StandardRequestException {
-        Assertions.assertFalse(usuarioService.addCancionToUsuario(uid, cid).getCanciones().isEmpty());
+        usuarioService.addCancionToUsuario(uid, cid);
+        Assertions.assertFalse(usuarioService.getCancionesByUsuario(uid).isEmpty());
     }
 
     @Test
     @Order(5)
     public void testDeleteCancionFromUsuario() throws StandardRequestException {
-        Assertions.assertTrue(usuarioService.deleteCancionFromUsuario(uid, cid).getCanciones().isEmpty());
+        usuarioService.deleteCancionFromUsuario(uid, cid);
+        Assertions.assertTrue(usuarioService.getCancionesByUsuario(uid).isEmpty());
     }
 }
 
